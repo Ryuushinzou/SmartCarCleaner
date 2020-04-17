@@ -7,10 +7,14 @@ name: Build Android project
 on:
   push:
     branches: [ master ]
+    paths:
+     - "android/**"
   pull_request:
     branches: 
      - master
-     - 'android/**'
+     - 'android/**' 
+    paths:
+     - "android/**"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
