@@ -1,1 +1,3 @@
 # Root .gitignore file. The files ignored by Git should be marked in the subsequent directory of the parent project. (e.g. For the Android project, the ignored files should be marked in the android/.gitignore file)
+### Mac generated files
+*.DS_STORE
