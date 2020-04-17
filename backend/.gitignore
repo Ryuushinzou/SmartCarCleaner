@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Mac generated files
+*.DS_STORE
