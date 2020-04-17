@@ -1,3 +1,4 @@
+![Build Spring app with Maven](https://github.com/Ryuushinzou/SmartCarCleaner/workflows/Build%20Spring%20app%20with%20Maven/badge.svg)
 ![Build Android project](https://github.com/Ryuushinzou/SmartCarCleaner/workflows/Build%20Android%20project/badge.svg)
 
 # Smart Car Cleaner
