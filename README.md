@@ -1,3 +1,5 @@
+![Build Spring app with Maven](https://github.com/Ryuushinzou/SmartCarCleaner/workflows/Build%20Spring%20app%20with%20Maven/badge.svg?branch=master)
+
 # Smart Car Cleaner
 A smart self-service washing station software ecosystem aimed to mobile users built using Java, Kotlin and ReactJS.
 
