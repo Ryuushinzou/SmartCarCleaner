@@ -1,3 +1,5 @@
+![Build Android project](https://github.com/Ryuushinzou/SmartCarCleaner/workflows/Build%20Android%20project/badge.svg)
+
 # Smart Car Cleaner
 A smart self-service washing station software ecosystem aimed to mobile users built using Java, Kotlin and ReactJS.
 
