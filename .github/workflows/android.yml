@@ -31,16 +31,16 @@ jobs:
         run: echo #FIREBASE_CONFIG > app/google-services.json
         
       - name: Run linter
-        run: ./android/gradlew lintStagingDebugCheck
+        run: ./android/gradlew lintStagingDebugCheck -p=android/
         
       - name: Run Unit Tests
-        run: ./android/gradlew testStagingDebugUnitTest
+        run: ./android/gradlew testStagingDebugUnitTest -p=android/
         
       - name: Assemble Debug Apk
-        run: ./android/gradlew assembleStagingDebug
+        run: ./android/gradlew assembleStagingDebug -p=android/
         
       - name: Assemble Debug Test Apk
-        run: ./android/gradlew assembleStagingDebugAndroidTest
+        run: ./android/gradlew assembleStagingDebugAndroidTest -p=android/
 
 # TODO: Add Firebase Test Lab to workflow (ticket: )
 #      - name: Run Firebase Test Lab tests
