@@ -28,10 +28,8 @@ jobs:
           #FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
         with:
           java-version: ${{ matrix.java }}
-      - run: |
-          echo "home: ${{ HOME }}"
-          echo "workspace: ${{ GITHUB_WORKSPACE }}"
-          mvn -f backend/pom.xml clean compile
+      - run: echo home = ${{ HOME }} workspace = ${{ GITHUB_WORKSPACE }}
+      - run: mvn -f backend/pom.xml clean compile
 
   build:
     runs-on: ubuntu-latest
