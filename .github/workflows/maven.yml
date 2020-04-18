@@ -27,14 +27,16 @@ jobs:
         uses: actions/setup-java@v1
         env:
           FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
-          #FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_PRIVATE_KEY: ${{ env.working_directory }}/secrets/google.json
         with:
           java-version: ${{ matrix.java }}
       - name: Test pathing
-        run: echo Working directory = ${{ env.working-directory }}
-        working-directory: ${{env.working-directory}}
-      - run: mvn -f backend/pom.xml clean compile
-        working-directory: ${{env.working-directory}}
+        run: |
+          echo Working directory = ${{ env.working_directory }}
+        working-directory: ${{env.working_directory}}
+      - name: Compile project
+        run: mvn -f backend/pom.xml clean compile
+        working-directory: ${{env.working_directory}}
 
   build:
     runs-on: ubuntu-latest
