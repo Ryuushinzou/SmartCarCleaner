@@ -35,7 +35,7 @@ jobs:
           echo Working directory = ${{ env.working_directory }}
         working-directory: ${{env.working_directory}}
       - name: Compile project
-        run: mvn -f backend/pom.xml clean compile
+        run: mvn clean compile
         working-directory: ${{env.working_directory}}
 
   build:
@@ -55,11 +55,11 @@ jobs:
       with:
         java-version: 11
     - name: Build Spring project
-      run: mvn -f backend/pom.xml clean verify
+      run: mvn clean verify
     - name: Run tests
-      run: mvn -f backend/pom.xml test
+      run: mvn test
     - name: Upload Maven build artifact
       uses: actions/upload-artifact@v1
       with:
        name: artifact
-       path: backend/target/app-0.0.1-SNAPSHOT.jar
+       path: target/app-0.0.1-SNAPSHOT.jar
