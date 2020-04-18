@@ -38,6 +38,9 @@ jobs:
           echo Paths located url = ${{ env.FIREBASE_DATABASE_URL }} key = ${{ env.FIREBASE_PRIVATE_KEY }}
         working-directory: ${{env.working_directory}}
       - name: Compile project
+        env:
+          FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+          FIREBASE_PRIVATE_KEY: ${{ env.working_directory }}/secrets/google.json
         run: mvn clean compile
         working-directory: ${{env.working_directory}}
 
@@ -60,9 +63,15 @@ jobs:
       with:
         java-version: 11
     - name: Build Spring project
+      env:
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+        FIREBASE_PRIVATE_KEY: ${{ env.working_directory }}/secrets/google.json
       run: mvn clean verify
       working-directory: ${{ env.working_directory }}
     - name: Run tests
+      env:
+        FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+        FIREBASE_PRIVATE_KEY: ${{ env.working_directory }}/secrets/google.json
       run: mvn test
       working-directory: ${{ env.working_directory }}
     - name: Upload Maven build artifact
