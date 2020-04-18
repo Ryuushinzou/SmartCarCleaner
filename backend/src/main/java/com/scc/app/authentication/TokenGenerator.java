@@ -57,4 +57,14 @@ public class TokenGenerator {
         Date expirationDate = claims.getExpiration();
         return expirationDate.after(new Date());
     }
+
+    public String getUserType(String authenticatedJwt) {
+
+        return decodeJWT(authenticatedJwt).getAudience();
+    }
+
+    public String getUserName(String authenticatedJwt) {
+
+        return decodeJWT(authenticatedJwt).getSubject();
+    }
 }

@@ -5,11 +5,11 @@ import com.scc.app.service.AuthenticationService;
 import org.jsondoc.core.annotation.Api;
 import org.jsondoc.core.annotation.ApiMethod;
 import org.jsondoc.core.annotation.ApiQueryParam;
+import org.jsondoc.core.annotation.ApiResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -22,7 +22,7 @@ public class LoginController {
 
     @ApiMethod(description = "Method that allows a user to login")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(
+    public @ApiResponseObject @ResponseBody ResponseEntity<String> login(
             @RequestParam("userName")
             @ApiQueryParam(name = "userName", description = "The name of the user") String userName,
 
@@ -34,12 +34,13 @@ public class LoginController {
         try {
             jwt = authenticationService.authenticateUser(userName, password);
         } catch (NoSuchAlgorithmException e) {
-            return "401";
+            System.out.println("user: " + userName + " failed to login");
         }
 
         if (jwt == null) {
-            return "401";
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>(jwt, HttpStatus.OK);
         }
-        return jwt;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,6 +33,7 @@ public class UserService {
 
     public User saveUser(User user) throws NoSuchAlgorithmException {
 
+
         user.setPassword(passwordEncrypt.encryptPassword(user.getPassword()));
         return userRepository.save(user);
     }
@@ -47,5 +49,7 @@ public class UserService {
                 .findFirst();
     }
 
-
+    public Collection<User> getAllUsers() {
+        return idToUser.values();
+    }
 }

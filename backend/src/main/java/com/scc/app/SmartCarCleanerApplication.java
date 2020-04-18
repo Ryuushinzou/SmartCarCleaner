@@ -17,5 +17,4 @@ public class SmartCarCleanerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SmartCarCleanerApplication.class, args);
 	}
-
 }

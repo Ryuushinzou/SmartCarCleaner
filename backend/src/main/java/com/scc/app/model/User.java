@@ -1,5 +1,6 @@
 package com.scc.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
@@ -10,11 +11,12 @@ import javax.persistence.*;
 @Data
 @Builder
 @Table(name = "user")
-@ToString(exclude = {"password"})
+@ToString
 @EqualsAndHashCode(exclude = {"id", "password"})
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiObject
+@JsonIgnoreProperties(value = {"password"})
+@ApiObject(name = "User", description = "User entity saved in the database")
 public class User {
 
     @Id

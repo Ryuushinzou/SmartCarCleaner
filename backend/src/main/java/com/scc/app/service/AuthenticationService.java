@@ -3,6 +3,7 @@ package com.scc.app.service;
 import com.scc.app.authentication.TokenGenerator;
 import com.scc.app.encryption.PasswordEncrypt;
 import com.scc.app.model.User;
+import com.scc.app.model.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,34 @@ public class AuthenticationService {
         }
 
         return null;
+    }
+
+    public boolean authenticatedUser(String authenticationJwt) {
+
+        return tokenGenerator.authenticatedUser(authenticationJwt);
+    }
+
+    public boolean hasWriteAccess(String authenticationJwt) {
+
+        String userType = tokenGenerator.getUserType(authenticationJwt);
+        return Objects.equals(userType, UserType.ADMIN.toString());
+    }
+
+    public boolean hasReadAccess(String authenticationJwt) {
+
+        String userType = tokenGenerator.getUserType(authenticationJwt);
+        return userTypeWithReadPermissions(userType);
+    }
+
+    public boolean hasReadAccessToUser(String authenticationJwt, String user) {
+
+        String userType = tokenGenerator.getUserType(authenticationJwt);
+        String userName = tokenGenerator.getUserName(authenticationJwt);
+        return userTypeWithReadPermissions(userType) || Objects.equals(user, userName);
+    }
+
+    private boolean userTypeWithReadPermissions(String userType) {
+
+        return Objects.equals(userType, UserType.ADMIN.toString()) || Objects.equals(userType, UserType.ANALYST.toString());
     }
 }
