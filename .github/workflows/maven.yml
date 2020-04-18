@@ -26,9 +26,11 @@ jobs:
         env:
           FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
           #FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          MAIN_DIR: ${{ github.HOME }}
+          WORKSPACE: ${{ github.GITHUB_WORKSPACE }}
         with:
           java-version: ${{ matrix.java }}
-      - run: echo home = ${{ github.HOME }} workspace = ${{ github.GITHUB_WORKSPACE }}
+      - run: echo home = ${{ MAIN_DIR }} workspace = ${{ WORKSPACE }}
       - run: mvn -f backend/pom.xml clean compile
 
   build:
