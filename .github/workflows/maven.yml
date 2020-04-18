@@ -29,7 +29,8 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - run: |
-          echo "HOME: ${ HOME } GITHUB_WORKSPACE: ${ GITHUB_WORKSPACE }"
+          echo "home: ${HOME}"
+          "workspace: ${ GITHUB_WORKSPACE }"
           mvn -f backend/pom.xml clean compile
 
   build:
