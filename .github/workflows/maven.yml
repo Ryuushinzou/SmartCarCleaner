@@ -19,6 +19,8 @@ jobs:
       matrix:
         java: [ 8, 11 ]
     name: Java ${{ matrix.java }} compile
+    env:
+      working_directory: ./backend
     steps:
       - uses: actions/checkout@master
       - name: Setup java
@@ -29,11 +31,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
       - name: Test pathing
-        env:
-          MAIN_DIR: ${{ github.HOME }}
-          WORKSPACE: ${{ github.GITHUB_WORKSPACE }}
         run: echo home = ${{ MAIN_DIR }} workspace = ${{ WORKSPACE }}
+        working-directory: ${{env.working-directory}}
       - run: mvn -f backend/pom.xml clean compile
+        working-directory: ${{env.working-directory}}
 
   build:
     runs-on: ubuntu-latest
