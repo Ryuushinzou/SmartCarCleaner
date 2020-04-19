@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TokenGenerator {
 
-    @Value("${token.generator}")
+    @Value("${token.generator.key}")
     private String tokenGeneratorKey;
 
     private String createJWT(String userName, UserType userType) {
