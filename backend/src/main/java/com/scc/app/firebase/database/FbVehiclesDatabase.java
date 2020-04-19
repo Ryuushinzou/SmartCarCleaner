@@ -5,64 +5,57 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.WriteResult;
-import com.scc.app.models.User;
+import com.scc.app.models.Vehicle;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
-	private static final String TAG = FbUsersDatabase.class.getSimpleName();
-
-	protected FbUsersDatabase() {
-		super("users");
+public class FbVehiclesDatabase extends FbDatabaseAbsImpl<Vehicle> {
+	protected FbVehiclesDatabase() {
+		super("vehicles");
 	}
 
 	@Override
-	public User getById(@NonNull String id) throws ExecutionException, InterruptedException {
-		DocumentReference document = getCollection().document(id);
-		ApiFuture<DocumentSnapshot> future = document.get();
+	public Vehicle getById(@NonNull String id) throws ExecutionException, InterruptedException {
+		DocumentReference documentReference = getCollection().document(id);
+		ApiFuture<DocumentSnapshot> future = documentReference.get();
 		DocumentSnapshot snapshot = future.get();
 
-		User user = null;
-		if (snapshot.exists()) {
-			user = snapshot.toObject(User.class);
+		Vehicle vehicle = null;
+		if(snapshot.exists()) {
+			vehicle = snapshot.toObject(Vehicle.class);
 		}
-
-		return user;
+		return vehicle;
 	}
 
 	@Override
-	public User create(@NonNull User newEntry) throws ExecutionException, InterruptedException {
+	public Vehicle create(@NonNull Vehicle newEntry) throws ExecutionException, InterruptedException {
 		DocumentReference document = getCollection().document();
 		ApiFuture<WriteResult> future = document.set(newEntry);
 
 		WriteResult result = future.get();
 		Timestamp creationTimestamp = result.getUpdateTime();
 
-		System.out.println(TAG + " - Created user with creationTimestamp: " + creationTimestamp.toString());
-
 		//  TODO: return new entry OR update newEntry with generated id and creationTimestamp
 		return newEntry;
 	}
 
 	@Override
-	public User update(@NonNull User entry) throws ExecutionException, InterruptedException {
-		ApiFuture<WriteResult> future = getCollection().document(entry.getUid()).set(entry);
+	public Vehicle update(@NonNull Vehicle entry) throws ExecutionException, InterruptedException {
+		ApiFuture<WriteResult> future = getCollection().document(entry.getId()).set(entry);
 
 		WriteResult result = future.get();
 		Timestamp lastUpdateTimestamp = result.getUpdateTime();
-
-		System.out.println(TAG + " - Updated user with lastUpdateTimestamp: " + lastUpdateTimestamp.toString());
 
 		//  TODO: return updated entry OR update entry with lastUpdateTimestamp
 		return entry;
 	}
 
 	@Override
-	public boolean delete(@NonNull User entry) throws ExecutionException, InterruptedException {
-		return delete(entry.getUid());
+	public boolean delete(@NonNull Vehicle entry) throws ExecutionException, InterruptedException {
+		return delete(entry.getId());
 	}
 
 	@Override
@@ -78,8 +71,6 @@ public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
 
 		WriteResult result = future.get();
 		Timestamp deletionTimestamp = result.getUpdateTime();
-
-		System.out.println(TAG + " - Deleted user at deletionTimestamp: " + deletionTimestamp.toString());
 
 		return true;
 	}
