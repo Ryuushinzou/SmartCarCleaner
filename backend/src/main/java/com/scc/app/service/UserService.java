@@ -28,7 +28,10 @@ public class UserService {
     @Scheduled(fixedDelay = 10_000)
     private void syncWithDb() {
 
-        userRepository.findAll().forEach(user -> idToUser.put(user.getId(), user.clone()));
+        ConcurrentMap<Long, User> idToUserTemporary = new ConcurrentHashMap<>();
+        userRepository.findAll().forEach(user -> idToUserTemporary.put(user.getId(), user.clone()));
+
+        idToUser = idToUserTemporary;
     }
 
     public User saveUser(User user) throws NoSuchAlgorithmException {

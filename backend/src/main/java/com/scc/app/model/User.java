@@ -1,6 +1,7 @@
 package com.scc.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
@@ -30,6 +31,7 @@ public class User {
     @ApiObjectField
     private String phoneNumber;
     @ApiObjectField
+//    @JsonProperty(access = Access.WRITE_ONLY)//TODO
     private String password;
 //    private Long[] carIds;
 

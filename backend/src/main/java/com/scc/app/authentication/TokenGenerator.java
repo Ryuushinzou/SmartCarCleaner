@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -17,13 +18,14 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TokenGenerator {
 
-    private final String SECRET_KEY = "mySecretKey";
+    @Value("${token.generator}")
+    private String tokenGeneratorKey;
 
     private String createJWT(String userName, UserType userType) {
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(tokenGeneratorKey);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         Date exp = new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
@@ -47,7 +49,7 @@ public class TokenGenerator {
     private Claims decodeJWT(String jwt) {
 
         return Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .setSigningKey(DatatypeConverter.parseBase64Binary(tokenGeneratorKey))
                 .parseClaimsJws(jwt).getBody();
     }
 
