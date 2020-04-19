@@ -14,10 +14,10 @@ import java.io.IOException;
 public class FirebaseInitialize {
 	private static final String TAG = FirebaseInitialize.class.getSimpleName();
 	@Value("${firebase.databaseUrl}")
-	private String firebaseDatabaseUrl;     //  https://some-project-85e15.firebaseio.com
+	private String firebaseDatabaseUrl;
 
 	@Value("${firebase.privateKeyPath}")
-	private String firebasePrivateKeyPath;  //  backend/secrets/some-project-85e15-firebase-adminsdk-klk0j-6579cc8886.json
+	private String firebasePrivateKeyPath;
 
 	@PostConstruct
 	public void init() throws IOException {
