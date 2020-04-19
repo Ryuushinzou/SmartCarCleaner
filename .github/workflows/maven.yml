@@ -71,6 +71,7 @@ jobs:
       run: |
           scr_dir=$secrets_dir
           url=$frb_db_url
+          token=$token_gen_secret
           if [ -z "$scr_dir"]
           then 
             echo "Scr_Dir is empty; set default"
@@ -85,13 +86,23 @@ jobs:
           else
             echo "url=$url"
           fi
+          if [ -z "$token" ]
+          then
+            echo "Token is empty; set default"
+            token="mySecretKey"
+          else
+            echo "token_gen_key=$token"
+          fi
           echo "::set-env name=FIREBASE_PRIVATE_KEY::${scr_dir}/backend/firebase.json"
           echo "::set-env name=FIREBASE_DATABASE_URL::${url}"
+          echo "::set-env name=TOKEN_GENERATOR::${token}"
           echo "url=$FIREBASE_DATABASE_URL"
           echo "p_key=$FIREBASE_PRIVATE_KEY"
+          echo "token_gen_key=$TOKEN_GENERATOR"
       env:
         secrets_dir: ${{ secrets.SECRETS_DIR }}
         frb_db_url: ${{ secrets.FIREBASE_DATABASE_URL }}
+        token_gen_secret: ${{ secrets.TOKEN_GENERATOR }}
     - name: Build Spring project
       run: |
         echo "Vars: ${FIREBASE_DATABASE_URL} || ${FIREBASE_PRIVATE_KEY}"
