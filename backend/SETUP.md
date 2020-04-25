@@ -3,7 +3,9 @@
 ## Target: SCC Spring app
 
 ## Prerequisites
-* Install latest JDK (at least JDK 8 should be installed on your machine).
+* Install latest JDK (at least JDK 8 should be installed on your machine) - Get Java 8 from [here](https://www.java.com/en/download/)
+* Install Maven - Get Maven from [here](https://maven.apache.org/download.cgi)
+* Make sure to have a reliable internet connection (only required if running the app with Firebase database connection)
 
 ## Project setup
 
