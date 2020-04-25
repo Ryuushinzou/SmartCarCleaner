@@ -1,4 +1,4 @@
-package com.scc.app.firebase.models;
+package com.scc.app.models;
 
 //  TODO: replace this with actual User model - https://github.com/Ryuushinzou/SmartCarCleaner/blob/backend/feature/users_api/backend/src/main/java/com/scc/app/model/User.java
 public class User {
