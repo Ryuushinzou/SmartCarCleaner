@@ -2,8 +2,11 @@ package com.scc.app.service;
 
 import com.scc.app.encryption.PasswordEncrypt;
 import com.scc.app.firebase.database.FbUsersDatabase;
+import com.scc.app.firebase.database.FbVehiclesDatabase;
 import com.scc.app.model.User;
+import com.scc.app.model.Vehicle;
 import com.scc.app.mysql.repository.UserRepository;
+import com.scc.app.mysql.repository.VehicleRepository;
 import com.scc.app.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,60 +21,49 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class UserService {
+public class VehicleService {
 
     @Autowired
-    private FbUsersDatabase fbUsersDatabase;
+    private FbVehiclesDatabase fbVehiclesDatabase;
 
     @Autowired
-    private UserRepository userRepository;
+    private VehicleRepository vehicleRepository;
 
-    @Autowired
-    private PasswordEncrypt passwordEncrypt;
-
-    private ConcurrentMap<Long, User> idToUser = new ConcurrentHashMap<>();
+    private ConcurrentMap<Long, Vehicle> idToVehicle = new ConcurrentHashMap<>();
 
     @Scheduled(fixedDelay = 10_000)
     private void syncWithDb() {
 
-        ConcurrentMap<Long, User> idToUserTemporary = new ConcurrentHashMap<>();
+        ConcurrentMap<Long, Vehicle> idToAppointmentTemporary = new ConcurrentHashMap<>();
 
         if (Utils.isFirebaseDatabase()) {
             //TODO get all firebase
         } else {
-            userRepository.findAll().forEach(user -> idToUserTemporary.put(user.getId(), user.clone()));
+            vehicleRepository.findAll().forEach(vehicle -> idToAppointmentTemporary.put(vehicle.getId(), vehicle.clone()));
         }
 
-        idToUser = idToUserTemporary;
+        idToVehicle = idToAppointmentTemporary;
     }
 
-    public User saveUser(User user) throws NoSuchAlgorithmException {
+    public Vehicle saveVehicle(Vehicle vehicle) {
 
-        user.setPassword(passwordEncrypt.encryptPassword(user.getPassword()));
         if (Utils.isFirebaseDatabase()) {
             try {
-                return fbUsersDatabase.create(user);
+                return fbVehiclesDatabase.create(vehicle);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
-            return userRepository.save(user);
+            return vehicleRepository.save(vehicle);
         }
         return null;
     }
 
-    public User getUserById(Long id) {
-        return idToUser.get(id);
+    public Vehicle getVehicleById(Long id) {
+        return idToVehicle.get(id);
     }
 
-    public Optional<User> findUserByName(String userName) {
-
-        return idToUser.values().stream()
-                .filter(user -> Objects.equals(user.getUserName(), userName))
-                .findFirst();
-    }
-
-    public Collection<User> getAllUsers() {
-        return idToUser.values();
+    public Collection<Vehicle> getAllVehicles() {
+        return idToVehicle.values();
     }
 }

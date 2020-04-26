@@ -5,7 +5,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.WriteResult;
-import com.scc.app.models.User;
+import com.scc.app.model.User;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +49,7 @@ public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
 
 	@Override
 	public User update(@NonNull User entry) throws ExecutionException, InterruptedException {
-		ApiFuture<WriteResult> future = getCollection().document(entry.getUid()).set(entry);
+		ApiFuture<WriteResult> future = getCollection().document(String.valueOf(entry.getId())).set(entry);
 
 		WriteResult result = future.get();
 		Timestamp lastUpdateTimestamp = result.getUpdateTime();
@@ -62,7 +62,8 @@ public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
 
 	@Override
 	public boolean delete(@NonNull User entry) throws ExecutionException, InterruptedException {
-		return delete(entry.getUid());
+
+		return delete(String.valueOf(entry.getId()));
 	}
 
 	@Override

@@ -5,7 +5,7 @@ import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.WriteResult;
-import com.scc.app.models.Vehicle;
+import com.scc.app.model.Vehicle;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +44,7 @@ public class FbVehiclesDatabase extends FbDatabaseAbsImpl<Vehicle> {
 
 	@Override
 	public Vehicle update(@NonNull Vehicle entry) throws ExecutionException, InterruptedException {
-		ApiFuture<WriteResult> future = getCollection().document(entry.getId()).set(entry);
+		ApiFuture<WriteResult> future = getCollection().document(String.valueOf(entry.getId())).set(entry);
 
 		WriteResult result = future.get();
 		Timestamp lastUpdateTimestamp = result.getUpdateTime();
@@ -55,7 +55,8 @@ public class FbVehiclesDatabase extends FbDatabaseAbsImpl<Vehicle> {
 
 	@Override
 	public boolean delete(@NonNull Vehicle entry) throws ExecutionException, InterruptedException {
-		return delete(entry.getId());
+
+		return delete(String.valueOf(entry.getId()));
 	}
 
 	@Override
