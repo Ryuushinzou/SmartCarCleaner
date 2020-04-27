@@ -46,7 +46,7 @@ public class WashingStationService {
         return null;
     }
 
-    public WashingStation getResourceById(Long id) {
+    public WashingStation getWashingStationById(Long id) {
         return idToWashingStation.get(id);
     }
 

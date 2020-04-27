@@ -1,15 +1,14 @@
 package com.scc.app.service;
 
 
-import com.scc.app.model.AppointmentStatus;
-import com.scc.app.model.User;
-import com.scc.app.model.Vehicle;
-import com.scc.app.model.WashingOption;
+import com.scc.app.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,12 +30,24 @@ public class LogicService {
     @Autowired
     private WashingOptionService washingOptionService;
 
+    @Autowired
+    private ResourceService resourceService;
+
     public void method(Long userId, Double latUser, Double longUser, Long vehicleId, List<Long> washingOptionIds, Long washingStationId, Date specificDate) {
 
         if (washingStationId != null) {
             User user = userService.getUserById(userId);
             Vehicle vehicle = vehicleService.getVehicleById(vehicleId);
             List<WashingOption> washingOptions = washingOptionIds.stream().map(id -> washingOptionService.getWashindOptionById(id)).collect(Collectors.toList());
+            WashingStation washingStation = washingStationService.getWashingStationById(washingStationId);
+            boolean enoughResources = hasEnoughResources(washingStation, washingOptions);
+
+            if (!enoughResources) {
+                return; //TODO treat this
+            }
+
+
+            List<Resource> requiredResources = washingOptions.stream().flatMap(wo -> wo.getRequiredResourcesIdToQuantity().values().stream()).map(rid -> resourceService.getResourceById(rid)).collect(Collectors.toList());
             /*
                 Steps:
                 1. get user
@@ -51,5 +62,24 @@ public class LogicService {
         } else {
 
         }
+    }
+
+    private boolean hasEnoughResources(WashingStation washingStation, List<WashingOption> washingOptions) {
+
+        Map<Long, Long> availableResourcesIdToQuantity = washingStation.getResourcesIdToQuantity();
+        Map<Long, Long> requiredResourceIdToQuantity = new HashMap<>();
+        for (WashingOption washingOption : washingOptions) {
+            washingOption.getRequiredResourcesIdToQuantity().forEach((k, v) -> requiredResourceIdToQuantity.computeIfPresent(k, (key, val) -> val + v));
+        }
+
+        for (Map.Entry<Long, Long> entry : requiredResourceIdToQuantity.entrySet()) {
+            Long resourceId = entry.getKey();
+            Long requiredQuantity = entry.getValue();
+            Long availableQuantity = availableResourcesIdToQuantity.get(resourceId);
+            if (availableQuantity == null || availableQuantity < requiredQuantity) {
+                return false;
+            }
+        }
+        return true;
     }
 }

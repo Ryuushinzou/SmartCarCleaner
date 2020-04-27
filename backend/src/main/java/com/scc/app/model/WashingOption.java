@@ -5,8 +5,6 @@ import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -31,7 +29,7 @@ public class WashingOption {
     private String description;
 
     @ApiObjectField
-    private List<Long> requiredResourcesIds;
+    private Map<Long, Long> requiredResourcesIdToQuantity;
 
     @ApiObjectField
     private Double price;
@@ -44,7 +42,7 @@ public class WashingOption {
                 .id(this.id)
                 .name(this.name)
                 .description(this.description)
-                .requiredResourcesIds(this.requiredResourcesIds)
+                .requiredResourcesIdToQuantity(this.requiredResourcesIdToQuantity)
                 .price(this.price)
                 .duration(this.duration)
                 .build();

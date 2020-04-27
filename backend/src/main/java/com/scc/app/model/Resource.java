@@ -30,16 +30,12 @@ public class Resource {
     @ApiObjectField
     private String phoneNumber;
 
-    @ApiObjectField
-    private Long quantity;
-
     public Resource clone() {
         return Resource.builder()
                 .id(this.id)
                 .name(this.name)
                 .description(this.description)
                 .phoneNumber(this.phoneNumber)
-                .quantity(this.quantity)
                 .build();
     }
 }

@@ -5,7 +5,7 @@ import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -32,7 +32,7 @@ public class WashingStation {
     private Integer slots;
 
     @ApiObjectField
-    private List<Long> resourcesIds;
+    private Map<Long, Long> resourcesIdToQuantity;
 
     @ApiObjectField
     @Enumerated(EnumType.STRING)
@@ -48,7 +48,7 @@ public class WashingStation {
                 .longPos(this.longPos)
                 .latPos(this.latPos)
                 .slots(this.slots)
-                .resourcesIds(this.resourcesIds)
+                .resourcesIdToQuantity(this.resourcesIdToQuantity)
                 .washingStationType(this.washingStationType)
                 .washingStationStatus(this.washingStationStatus)
                 .build();
