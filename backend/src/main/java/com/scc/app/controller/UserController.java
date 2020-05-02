@@ -25,23 +25,12 @@ public class UserController {
     private AuthenticationService authenticationService;
 
     @ApiMethod(description = "Method that allows to add a new user")
-    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
     @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ApiResponseObject
     @ResponseBody
     ResponseEntity<User> save(
-            @RequestHeader("authorization") String authorization,
             @ApiBodyObject @RequestBody User user
     ) {
-
-        if (!authenticationService.authenticatedUser(authorization)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!authenticationService.hasWriteAccess(authorization)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         try {
             User savedUser = userService.saveUser(user);
             if (savedUser == null) {

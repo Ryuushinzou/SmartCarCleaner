@@ -1,21 +1,14 @@
 package com.scc.app.service;
 
-import com.scc.app.encryption.PasswordEncrypt;
 import com.scc.app.firebase.database.FbAppointmentsDatabase;
-import com.scc.app.firebase.database.FbUsersDatabase;
 import com.scc.app.model.Appointment;
-import com.scc.app.model.User;
 import com.scc.app.mysql.repository.AppointmentRepository;
-import com.scc.app.mysql.repository.UserRepository;
 import com.scc.app.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
@@ -69,11 +62,11 @@ public class AppointmentService {
 
     public Collection<Appointment> getAppointmentsForUser(Long userId) {
 
-        return appointmentRepository.findbyUserId(userId);
+        return appointmentRepository.findByUserId(userId);
     }
 
     public Collection<Appointment> getAppointmentsForWashingStation(Long washingStationId) {
 
-        return appointmentRepository.findbyUserId(washingStationId);
+        return appointmentRepository.findByUserId(washingStationId);
     }
 }

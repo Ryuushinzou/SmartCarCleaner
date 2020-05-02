@@ -37,6 +37,7 @@ public class Supply {
     private Date date;
 
     @ApiObjectField
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> resourceIds;
 
     @ApiObjectField

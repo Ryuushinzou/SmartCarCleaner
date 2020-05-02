@@ -45,6 +45,7 @@ public class Appointment {
     private Integer slotNo;//TODO check if really needed(find a way to accept appointments based on supported ramps)
 
     @ApiObjectField
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> washingOptionsIds;
 
     @ApiObjectField

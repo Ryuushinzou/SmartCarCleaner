@@ -29,6 +29,7 @@ public class WashingOption {
     private String description;
 
     @ApiObjectField
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Long, Long> requiredResourcesIdToQuantity;
 
     @ApiObjectField

@@ -27,15 +27,11 @@ public class Resource {
     @ApiObjectField
     private String description;
 
-    @ApiObjectField
-    private String phoneNumber;
-
     public Resource clone() {
         return Resource.builder()
                 .id(this.id)
                 .name(this.name)
                 .description(this.description)
-                .phoneNumber(this.phoneNumber)
                 .build();
     }
 }

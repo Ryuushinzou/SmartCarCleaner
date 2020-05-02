@@ -32,6 +32,7 @@ public class WashingStation {
     private Integer slots;
 
     @ApiObjectField
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<Long, Long> resourcesIdToQuantity;
 
     @ApiObjectField
