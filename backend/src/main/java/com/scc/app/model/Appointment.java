@@ -42,9 +42,6 @@ public class Appointment {
     private Double price;
 
     @ApiObjectField
-    private Integer slotNo;//TODO check if really needed(find a way to accept appointments based on supported ramps)
-
-    @ApiObjectField
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Long> washingOptionsIds;
 
@@ -61,7 +58,6 @@ public class Appointment {
                 .dateStart(this.dateStart)
                 .dateEnd(this.dateEnd)
                 .price(this.price)
-                .slotNo(this.slotNo)
                 .appointmentStatus(this.appointmentStatus)
                 .washingOptionsIds(this.washingOptionsIds)
                 .build();
