@@ -59,6 +59,13 @@ public class VehicleService {
         return null;
     }
 
+    public Vehicle deleteById(Long vehicleId) {
+
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
+        vehicleRepository.deleteById(vehicleId);
+        return vehicle.orElse(null);
+    }
+
     public Vehicle getVehicleById(Long id) {
         return idToVehicle.get(id);
     }

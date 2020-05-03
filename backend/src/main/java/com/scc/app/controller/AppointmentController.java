@@ -4,6 +4,7 @@ import com.scc.app.model.Appointment;
 import com.scc.app.service.AppointmentService;
 import com.scc.app.service.AppointmentsPossibilitiesService;
 import com.scc.app.service.AuthenticationService;
+import com.scc.app.utils.Constants;
 import org.jsondoc.core.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -114,7 +115,10 @@ public class AppointmentController {
             @RequestParam(value = "washingStationId", required = false) Long washingStationId,
 
             @ApiQueryParam(name = "date", description = "The date", required = false)
-            @RequestParam(value = "date", required = false) Date appointmentDate
+            @RequestParam(value = "date", required = false) Date appointmentDate,
+
+            @ApiQueryParam(name = "appointmentPossibilitiesNo", description = "The number of the required possibilities", required = false)
+            @RequestParam(value = "appointmentPossibilitiesNo", required = false) Integer appointmentPossibilitiesNo
 
     ) {
 
@@ -122,6 +126,10 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>(appointmentsPossibilitiesService.getAppointmentPossibilities(latUser, longUser, vehicleId, washingOptionIds, washingStationId, appointmentDate), HttpStatus.OK);
+        if (appointmentPossibilitiesNo == null || appointmentPossibilitiesNo < 0) {
+            appointmentPossibilitiesNo = Constants.DEFAULT_APPOINTMENTS_POSSIBILITIES;
+        }
+
+        return new ResponseEntity<>(appointmentsPossibilitiesService.getAppointmentPossibilities(appointmentPossibilitiesNo, latUser, longUser, vehicleId, washingOptionIds, washingStationId, appointmentDate), HttpStatus.OK);
     }
 }

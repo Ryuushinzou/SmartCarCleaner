@@ -1,5 +1,6 @@
 package com.scc.app.controller;
 
+import com.scc.app.model.User;
 import com.scc.app.model.Vehicle;
 import com.scc.app.service.VehicleService;
 import com.scc.app.service.AuthenticationService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @Api(description = "The vehicles controller", name = "Vehicle service")
@@ -65,5 +67,22 @@ public class VehicleController {
         }
 
         return new ResponseEntity<>(vehicleService.getAllVehicles(), HttpStatus.OK);
+    }
+
+    @ApiMethod(description = "Method that deletes a vehicle")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/vehicles/{vehicleId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<Vehicle> deleteById(
+            @RequestHeader("authorization") String authorization,
+            @ApiPathParam(name = "vehicleId") @PathVariable(value = "vehicleId") Long vehicleId
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(vehicleService.deleteById(vehicleId), HttpStatus.OK);
     }
 }

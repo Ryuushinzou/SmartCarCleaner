@@ -25,7 +25,7 @@ public class AppointmentsPossibilitiesService {
     @Autowired
     private WashingOptionService washingOptionService;
 
-    public List<Appointment> getAppointmentPossibilities(Double latUser, Double longUser, Long vehicleId, List<Long> washingOptionIds, Long washingStationId, Date appointmentDate) {
+    public List<Appointment> getAppointmentPossibilities(Integer appointmentPossibilitiesNo, Double latUser, Double longUser, Long vehicleId, List<Long> washingOptionIds, Long washingStationId, Date appointmentDate) {
 
         List<Appointment> appointmentPossibilities = new ArrayList<>();
         List<WashingOption> washingOptions = washingOptionIds.stream().map(id -> washingOptionService.getWashindOptionById(id)).collect(Collectors.toList());
@@ -33,7 +33,7 @@ public class AppointmentsPossibilitiesService {
         double price = washingOptions.stream().mapToDouble(WashingOption::getPrice).sum();
 
         if (washingStationId != null) {
-            appointmentPossibilities.addAll(makeAppointmentsPossibilitiesForWashingStation(latUser, longUser, vehicleId, washingOptionIds, washingOptions, washingStationId, price, totalDuration, appointmentDate));
+            appointmentPossibilities.addAll(makeAppointmentsPossibilitiesForWashingStation(appointmentPossibilitiesNo, latUser, longUser, vehicleId, washingOptionIds, washingOptions, washingStationId, price, totalDuration, appointmentDate));
         } else {
             Comparator<WashingStation> distanceComparator = (ws1, ws2) -> directionService.getDurationBetweenPoints(latUser, longUser, ws1.getLatPos(), ws2.getLongPos()).compareTo(directionService.getDurationBetweenPoints(latUser, longUser, ws2.getLatPos(), ws2.getLongPos()));
             List<WashingStation> availableWashingStations = washingStationService.getAllWashingStations().stream()
@@ -42,9 +42,9 @@ public class AppointmentsPossibilitiesService {
                     .collect(Collectors.toList());
 
             for (WashingStation washingStation : availableWashingStations) {
-                appointmentPossibilities.addAll(makeAppointmentsPossibilitiesForWashingStation(latUser, longUser, vehicleId, washingOptionIds, washingOptions, washingStation.getId(), price, totalDuration, appointmentDate));
-                if (appointmentPossibilities.size() >= Constants.APPOINTMENTS_POSSIBILITIES) {
-                    appointmentPossibilities = appointmentPossibilities.subList(0, Constants.APPOINTMENTS_POSSIBILITIES);
+                appointmentPossibilities.addAll(makeAppointmentsPossibilitiesForWashingStation(appointmentPossibilitiesNo, latUser, longUser, vehicleId, washingOptionIds, washingOptions, washingStation.getId(), price, totalDuration, appointmentDate));
+                if (appointmentPossibilities.size() >= appointmentPossibilitiesNo) {
+                    appointmentPossibilities = appointmentPossibilities.subList(0, appointmentPossibilitiesNo);
                     break;
                 }
             }
@@ -53,7 +53,7 @@ public class AppointmentsPossibilitiesService {
         return appointmentPossibilities;
     }
 
-    private Collection<? extends Appointment> makeAppointmentsPossibilitiesForWashingStation(Double latUser, Double longUser, Long vehicleId, List<Long> washingOptionIds, List<WashingOption> washingOptions, Long washingStationId, double price, long totalDuration, Date appointmentDate) {
+    private Collection<? extends Appointment> makeAppointmentsPossibilitiesForWashingStation(Integer appointmentPossibilitiesNo, Double latUser, Double longUser, Long vehicleId, List<Long> washingOptionIds, List<WashingOption> washingOptions, Long washingStationId, double price, long totalDuration, Date appointmentDate) {
 
         List<Appointment> appointmentPossibilities = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class AppointmentsPossibilitiesService {
 
         int noTries = 0;
 
-        while (appointmentPossibilities.size() < Constants.APPOINTMENTS_POSSIBILITIES && noTries < Constants.MAX_TRIES) {
+        while (appointmentPossibilities.size() < appointmentPossibilitiesNo && noTries < Constants.MAX_TRIES) {
 
             final Date finalStartAppointmentDate = adjustAppointmentDate(appointmentDate, latUser, longUser, washingStation.getLatPos(), washingStation.getLongPos());
             final Date finalEndAppointmentDate = new Date(finalStartAppointmentDate.getTime() + totalDuration);
