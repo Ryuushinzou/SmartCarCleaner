@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SmartCarCleaner</string>
+    <string name="app_version_placeholder">v%s-%s</string>
+    <string name="app_flavor_placeholder">%s</string>
+    <string name="app_build_type_placeholder">%s</string>
+    <string name="app_error_placeholder">Error: 000 - Placeholder error message</string>
 </resources>
