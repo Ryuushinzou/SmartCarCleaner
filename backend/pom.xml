@@ -114,10 +114,12 @@
             <groupId>net.jodah</groupId>
             <artifactId>expiringmap</artifactId>
             <version>0.5.9</version>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
         </dependency>
+	<dependency>
+		<groupId>junit</groupId>
+            	<artifactId>junit</artifactId>
+            	<scope>test</scope>
+	</dependency>
     </dependencies>
 
     <dependencyManagement>
