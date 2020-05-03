@@ -27,11 +27,15 @@ public class Resource {
     @ApiObjectField
     private String description;
 
+    @ApiObjectField
+    private Long pricePerUnit;
+
     public Resource clone() {
         return Resource.builder()
                 .id(this.id)
                 .name(this.name)
                 .description(this.description)
+                .pricePerUnit(this.pricePerUnit)
                 .build();
     }
 }

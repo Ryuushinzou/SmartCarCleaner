@@ -6,7 +6,6 @@ import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -25,12 +24,6 @@ public class Supply {
     private Long id;
 
     @ApiObjectField
-    private String name;
-
-    @ApiObjectField
-    private String description;
-
-    @ApiObjectField
     private Long washingStationId;
 
     @ApiObjectField
@@ -38,19 +31,23 @@ public class Supply {
 
     @ApiObjectField
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Long> resourceIds;
+    private Map<Long, Long> resourceIdToQuantity;
 
     @ApiObjectField
     private Double price;
 
+    @ApiObjectField
+    @Enumerated(EnumType.STRING)
+    private SupplyStatus supplyStatus;
+
     public Supply clone() {
+
         return Supply.builder()
                 .id(this.id)
-                .name(this.name)
-                .description(this.description)
                 .washingStationId(this.washingStationId)
                 .date(this.date)
-                .resourceIds(this.resourceIds)
+                .resourceIdToQuantity(this.resourceIdToQuantity)
+                .supplyStatus(this.supplyStatus)
                 .price(this.price)
                 .build();
     }

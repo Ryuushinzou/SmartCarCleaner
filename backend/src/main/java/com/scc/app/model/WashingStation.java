@@ -35,14 +35,6 @@ public class WashingStation {
     @ElementCollection(fetch = FetchType.EAGER)
     private Map<Long, Long> resourcesIdToQuantity;
 
-    @ApiObjectField
-    @Enumerated(EnumType.STRING)
-    private WashingStationStatus washingStationStatus;
-
-    @ApiObjectField
-    @Enumerated(EnumType.STRING)
-    private WashingStationType washingStationType;
-
     public WashingStation clone() {
         return WashingStation.builder()
                 .id(this.id)
@@ -50,8 +42,6 @@ public class WashingStation {
                 .latPos(this.latPos)
                 .slots(this.slots)
                 .resourcesIdToQuantity(this.resourcesIdToQuantity)
-                .washingStationType(this.washingStationType)
-                .washingStationStatus(this.washingStationStatus)
                 .build();
     }
 }

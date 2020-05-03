@@ -5,5 +5,5 @@ public enum AppointmentStatus {
     IN_PROGRESS,
     PAID,
     NOT_PAID,
-    DONE
+    FINISHED
 }

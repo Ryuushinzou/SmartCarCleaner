@@ -2,6 +2,7 @@ package com.scc.app.controller;
 
 import com.scc.app.model.Appointment;
 import com.scc.app.service.AppointmentService;
+import com.scc.app.service.AppointmentsPossibilitiesService;
 import com.scc.app.service.AuthenticationService;
 import org.jsondoc.core.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @Api(description = "The appointments controller", name = "Appointment service")
@@ -18,6 +21,9 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private AppointmentsPossibilitiesService appointmentsPossibilitiesService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -82,5 +88,40 @@ public class AppointmentController {
         }
 
         return new ResponseEntity<>(appointmentService.getAppointmentsForUser(userId), HttpStatus.OK);
+    }
+
+    @ApiMethod(description = "Method that returns possibilities of appointments")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/appointments/possibilities", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<Collection<Appointment>> getAppointmentPossibilities(
+            @RequestHeader("authorization") String authorization,
+
+            @ApiQueryParam(name = "latUser", description = "The latitude of the user")
+            @RequestParam("latUser") Double latUser,
+
+            @ApiQueryParam(name = "longUser", description = "The longitude of the user")
+            @RequestParam("longUser") Double longUser,
+
+            @ApiQueryParam(name = "vehicleId", description = "The id of the vehicle")
+            @RequestParam("vehicleId") Long vehicleId,
+
+            @ApiQueryParam(name = "washingOptionIds", description = "The washing options ids")
+            @RequestParam("washingOptionIds") List<Long> washingOptionIds,
+
+            @ApiQueryParam(name = "washingStationId", description = "The washing station id", required = false)
+            @RequestParam(value = "washingStationId", required = false) Long washingStationId,
+
+            @ApiQueryParam(name = "date", description = "The date", required = false)
+            @RequestParam(value = "date", required = false) Date appointmentDate
+
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(appointmentsPossibilitiesService.getAppointmentPossibilities(latUser, longUser, vehicleId, washingOptionIds, washingStationId, appointmentDate), HttpStatus.OK);
     }
 }

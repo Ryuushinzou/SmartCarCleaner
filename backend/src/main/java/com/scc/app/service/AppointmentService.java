@@ -47,6 +47,7 @@ public class AppointmentService {
                 e.printStackTrace();
             }
         } else {
+            //TODO remove resources from washing station
             return appointmentRepository.save(appointment);
         }
         return null;
@@ -65,7 +66,7 @@ public class AppointmentService {
         return appointmentRepository.findByUserId(userId);
     }
 
-    public Collection<Appointment> getAppointmentsForWashingStation(Long washingStationId) {
+    public Collection<Appointment> getAppointmentsByWashingStation(Long washingStationId) {
 
         return appointmentRepository.findByUserId(washingStationId);
     }
