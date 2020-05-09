@@ -124,6 +124,27 @@ public class AppointmentController {
         return ResponseEntity.ok(Constants.DONE);
     }
 
+    @ApiMethod(description = "Method that gets an appointment")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/appointments/{appointmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<Appointment> setAppointment(
+            @RequestHeader("authorization") String authorization,
+            @ApiPathParam(name = "appointmentId") @PathVariable(value = "appointmentId") Long appointmentId
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!authenticationService.hasReadAccess(authorization)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(appointmentService.getAppointmentById(appointmentId));
+    }
+
     @ApiMethod(description = "Method that return all appointments for a user")
     @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
     @RequestMapping(value = "/appointments/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
