@@ -46,7 +46,7 @@ public class ResourceController {
         if (saved == null) {
             //TODO user already exists
         }
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return ResponseEntity.ok(saved);
     }
 
     @ApiMethod(description = "Method that return all the resources")
@@ -66,6 +66,6 @@ public class ResourceController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(resourceService.getAllResources(), HttpStatus.OK);
+        return ResponseEntity.ok(resourceService.getAllResources());
     }
 }

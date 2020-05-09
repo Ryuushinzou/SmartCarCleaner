@@ -51,7 +51,7 @@ public class AppointmentController {
         if (savedAppointment == null) {
             //TODO user already exists
         }
-        return new ResponseEntity<>(savedAppointment, HttpStatus.OK);
+        return ResponseEntity.ok(savedAppointment);
     }
 
     @ApiMethod(description = "Method that return all the appointments")
@@ -71,7 +71,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(appointmentService.getAllAppointments(), HttpStatus.OK);
+        return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
     @ApiMethod(description = "Method that return all appointments for a user")
@@ -88,7 +88,7 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>(appointmentService.getAppointmentsForUser(userId), HttpStatus.OK);
+        return ResponseEntity.ok(appointmentService.getAppointmentsForUser(userId));
     }
 
     @ApiMethod(description = "Method that returns possibilities of appointments")
@@ -130,6 +130,6 @@ public class AppointmentController {
             appointmentPossibilitiesNo = Constants.DEFAULT_APPOINTMENTS_POSSIBILITIES;
         }
 
-        return new ResponseEntity<>(appointmentsPossibilitiesService.getAppointmentPossibilities(appointmentPossibilitiesNo, latUser, longUser, vehicleId, washingOptionIds, washingStationId, appointmentDate), HttpStatus.OK);
+        return ResponseEntity.ok(appointmentsPossibilitiesService.getAppointmentPossibilities(appointmentPossibilitiesNo, latUser, longUser, vehicleId, washingOptionIds, washingStationId, appointmentDate));
     }
 }

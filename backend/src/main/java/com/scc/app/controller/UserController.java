@@ -36,7 +36,7 @@ public class UserController {
             if (savedUser == null) {
                 //TODO user already exists
             }
-            return new ResponseEntity<>(savedUser, HttpStatus.OK);
+            return ResponseEntity.ok(savedUser);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,7 +60,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return  ResponseEntity.ok(userService.getAllUsers());
     }
 
     @ApiMethod(description = "Method that return a user")
@@ -82,6 +82,6 @@ public class UserController {
         }
 
         Optional<User> userByName = userService.findUserByName(userName);
-        return userByName.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
+        return userByName.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
     }
 }

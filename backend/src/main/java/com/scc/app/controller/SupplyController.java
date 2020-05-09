@@ -44,7 +44,7 @@ public class SupplyController {
         if (saved == null) {
             //TODO user already exists
         }
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return ResponseEntity.ok(saved);
     }
 
     @ApiMethod(description = "Method that return all the supplies")
@@ -64,6 +64,6 @@ public class SupplyController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(supplyService.getAllSupplies(), HttpStatus.OK);
+        return ResponseEntity.ok(supplyService.getAllSupplies());
     }
 }

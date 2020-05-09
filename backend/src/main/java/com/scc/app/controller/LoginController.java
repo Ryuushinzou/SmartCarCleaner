@@ -29,7 +29,7 @@ public class LoginController {
             @ApiQueryParam(name = "userName", description = "The name of the user")
             @RequestParam("userName") String userName,
 
-            @ApiQueryParam(name = "lastName", description = "The password")
+            @ApiQueryParam(name = "password", description = "The password")
             @RequestParam("password") String password
     ) {
 
@@ -43,7 +43,7 @@ public class LoginController {
         if (jwt == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
+            return ResponseEntity.ok(jwt);
         }
     }
 }

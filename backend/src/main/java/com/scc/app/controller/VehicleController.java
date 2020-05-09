@@ -46,7 +46,7 @@ public class VehicleController {
         if (savedVehicle == null) {
             //TODO user already exists
         }
-        return new ResponseEntity<>(savedVehicle, HttpStatus.OK);
+        return ResponseEntity.ok(savedVehicle);
     }
 
     @ApiMethod(description = "Method that return all the vehicles")
@@ -66,7 +66,7 @@ public class VehicleController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(vehicleService.getAllVehicles(), HttpStatus.OK);
+        return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
     @ApiMethod(description = "Method that deletes a vehicle")
@@ -83,6 +83,6 @@ public class VehicleController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>(vehicleService.deleteById(vehicleId), HttpStatus.OK);
+        return ResponseEntity.ok(vehicleService.deleteById(vehicleId));
     }
 }

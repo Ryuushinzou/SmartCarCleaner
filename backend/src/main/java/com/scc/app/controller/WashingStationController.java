@@ -44,7 +44,7 @@ public class WashingStationController {
         if (saved == null) {
             //TODO user already exists
         }
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        return ResponseEntity.ok(saved);
     }
 
     @ApiMethod(description = "Method that return all the washing station")
@@ -64,6 +64,6 @@ public class WashingStationController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(washingStationService.getAllWashingStations(), HttpStatus.OK);
+        return ResponseEntity.ok(washingStationService.getAllWashingStations());
     }
 }
