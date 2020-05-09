@@ -87,6 +87,7 @@ public class AppointmentsPossibilitiesService {
                         .dateEnd(finalEndAppointmentDate)
                         .price(price)
                         .washingOptionsIds(washingOptionIds)
+                        .appointmentStatus(AppointmentStatus.CREATED)
                         .build();
                 appointmentPossibilities.add(appointmentPossibility);
             }

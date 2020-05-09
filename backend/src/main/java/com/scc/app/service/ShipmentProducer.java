@@ -3,6 +3,7 @@ package com.scc.app.service;
 import com.scc.app.model.Supply;
 import com.scc.app.model.SupplyStatus;
 import com.scc.app.utils.Constants;
+import com.scc.app.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class SupplyProducer {
+public class ShipmentProducer {
 
     @Autowired
     private WashingStationService washingStationService;
@@ -38,10 +39,11 @@ public class SupplyProducer {
 
             if (!CollectionUtils.isEmpty(neededResourcesIdToQuantity)) {
                 double totalPrice = neededResourcesIdToQuantity.keySet().stream().map(id -> resourceService.getResourceById(id)).mapToDouble(r -> neededResourcesIdToQuantity.get(r.getId()) * r.getPricePerUnit()).sum();
+
                 Supply newSupply = Supply.builder().washingStationId(ws.getId())
                         .price(totalPrice)
                         .resourceIdToQuantity(neededResourcesIdToQuantity)
-                        .date(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
+                        .date(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(Utils.getRandom(Constants.MAX_SHIPMENT_DURATION_IN_HOURS))))
                         .supplyStatus(SupplyStatus.CREATED)
                         .build();
 
