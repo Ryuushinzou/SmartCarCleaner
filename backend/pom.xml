@@ -111,10 +111,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>net.jodah</groupId>
+            <artifactId>expiringmap</artifactId>
+            <version>0.5.9</version>
         </dependency>
+	<dependency>
+		<groupId>junit</groupId>
+            	<artifactId>junit</artifactId>
+            	<scope>test</scope>
+	</dependency>
     </dependencies>
 
     <dependencyManagement>

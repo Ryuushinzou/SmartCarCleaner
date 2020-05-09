@@ -19,7 +19,6 @@ public class FirebaseInitialize {
 	@Value("${firebase.privateKeyPath}")
 	private String firebasePrivateKeyPath;
 
-	@PostConstruct
 	public void init() throws IOException {
 		FileInputStream serviceAccount =
 				new FileInputStream(firebasePrivateKeyPath);

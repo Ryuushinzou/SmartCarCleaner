@@ -1,8 +1,8 @@
 package com.scc.app.controller;
 
 import com.scc.app.model.User;
-import com.scc.app.service.AuthenticationService;
 import com.scc.app.service.UserService;
+import com.scc.app.service.AuthenticationService;
 import org.jsondoc.core.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,29 +25,18 @@ public class UserController {
     private AuthenticationService authenticationService;
 
     @ApiMethod(description = "Method that allows to add a new user")
-    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
     @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ApiResponseObject
     @ResponseBody
     ResponseEntity<User> save(
-            @RequestHeader("authorization") String authorization,
             @ApiBodyObject @RequestBody User user
     ) {
-
-        if (!authenticationService.authenticatedUser(authorization)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!authenticationService.hasWriteAccess(authorization)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-
         try {
             User savedUser = userService.saveUser(user);
             if (savedUser == null) {
                 //TODO user already exists
             }
-            return new ResponseEntity<>(savedUser, HttpStatus.OK);
+            return ResponseEntity.ok(savedUser);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,7 +60,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+        return  ResponseEntity.ok(userService.getAllUsers());
     }
 
     @ApiMethod(description = "Method that return a user")
@@ -95,6 +82,6 @@ public class UserController {
         }
 
         Optional<User> userByName = userService.findUserByName(userName);
-        return userByName.map(user -> new ResponseEntity<>(user, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
+        return userByName.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NO_CONTENT));
     }
 }

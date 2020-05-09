@@ -22,11 +22,14 @@ public class LoginController {
 
     @ApiMethod(description = "Method that allows a user to login")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public @ApiResponseObject @ResponseBody ResponseEntity<String> login(
-            @RequestParam("userName")
-            @ApiQueryParam(name = "userName", description = "The name of the user") String userName,
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<String> login(
 
-            @ApiQueryParam(name = "lastName", description = "The password")
+            @ApiQueryParam(name = "userName", description = "The name of the user")
+            @RequestParam("userName") String userName,
+
+            @ApiQueryParam(name = "password", description = "The password")
             @RequestParam("password") String password
     ) {
 
@@ -40,7 +43,7 @@ public class LoginController {
         if (jwt == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
+            return ResponseEntity.ok(jwt);
         }
     }
 }

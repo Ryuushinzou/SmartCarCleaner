@@ -7,6 +7,8 @@ import org.jsondoc.core.annotation.ApiObject;
 import org.jsondoc.core.annotation.ApiObjectField;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,7 +18,6 @@ import javax.persistence.*;
 @EqualsAndHashCode(exclude = {"id", "password"})
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(value = {"password"})
 @ApiObject(name = "User", description = "User entity saved in the database")
 public class User {
 
@@ -26,14 +27,20 @@ public class User {
 
     @ApiObjectField
     private String userName;
+
     @ApiObjectField
     private String email;
+
     @ApiObjectField
     private String phoneNumber;
+
     @ApiObjectField
-//    @JsonProperty(access = Access.WRITE_ONLY)//TODO
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-//    private Long[] carIds;
+
+    @ApiObjectField
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<Long> carIds = new ArrayList<>();
 
     @ApiObjectField
     @Enumerated(EnumType.STRING)
@@ -45,6 +52,7 @@ public class User {
                 .userName(this.userName)
                 .email(this.email)
                 .phoneNumber(this.phoneNumber)
+                .carIds(this.carIds)
                 .password(this.password)
                 .userType(this.userType)
                 .build();
