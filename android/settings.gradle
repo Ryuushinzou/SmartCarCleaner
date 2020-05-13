@@ -1,3 +1,4 @@
 rootProject.name='SmartCarCleaner'
 include ':app'
+include ':auth-api'
 include ':auth-ui'
