@@ -49,7 +49,7 @@ public class WashingStationController {
 
     @ApiMethod(description = "Method that return all the washing station")
     @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
-    @RequestMapping(value = "/washingStaions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/washingStations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ApiResponseObject
     @ResponseBody
     ResponseEntity<Collection<WashingStation>> getAll(
@@ -65,5 +65,26 @@ public class WashingStationController {
         }
 
         return ResponseEntity.ok(washingStationService.getAllWashingStations());
+    }
+
+    @ApiMethod(description = "Method that return a washing station")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/washingStations/{washingStationId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<WashingStation> getWashingStation(
+            @RequestHeader("authorization") String authorization,
+            @ApiPathParam(name = "washingStationId") @PathVariable(value = "washingStationId") Long washingStationId
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!authenticationService.hasReadAccess(authorization)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(washingStationService.getWashingStationById(washingStationId));
     }
 }

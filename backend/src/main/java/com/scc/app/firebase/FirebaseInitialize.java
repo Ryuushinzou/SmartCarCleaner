@@ -12,7 +12,9 @@ import java.io.IOException;
 
 @Service
 public class FirebaseInitialize {
+
 	private static final String TAG = FirebaseInitialize.class.getSimpleName();
+
 	@Value("${firebase.databaseUrl}")
 	private String firebaseDatabaseUrl;
 

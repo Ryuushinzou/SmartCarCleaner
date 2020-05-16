@@ -55,10 +55,11 @@ public class SupplyService {
         return idToSupply.values();
     }
 
-    public void update(Supply supplyUpdated) {
+    public Supply update(Supply supplyUpdated) {
 
         Supply supply = idToSupply.get(supplyUpdated.getId());
         if (supply != null) {
+
             if (supplyUpdated.getResourceIdToQuantity() != null) {
                 supply.setResourceIdToQuantity(supplyUpdated.getResourceIdToQuantity());
             }
@@ -78,7 +79,8 @@ public class SupplyService {
             if (supplyUpdated.getPrice() != null) {
                 supply.setPrice(supplyUpdated.getPrice());
             }
-            supplyRepository.save(supply);
+            return supplyRepository.save(supply);
         }
+        return null;
     }
 }
