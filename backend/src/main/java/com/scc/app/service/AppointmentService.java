@@ -70,4 +70,36 @@ public class AppointmentService {
 
         return appointmentRepository.findByUserId(washingStationId);
     }
+
+    public void update(Appointment appointmentUpdated) {
+
+        Appointment appointment = idToAppointment.get(appointmentUpdated.getId());
+        if (appointment != null) {
+
+            if (appointmentUpdated.getUserId() != null) {
+                appointment.setUserId(appointmentUpdated.getUserId());
+            }
+            if (appointmentUpdated.getVehicleId() != null) {
+                appointment.setVehicleId(appointmentUpdated.getVehicleId());
+            }
+            if (appointmentUpdated.getDateStart() != null) {
+                appointment.setDateStart(appointmentUpdated.getDateStart());
+            }
+            if (appointmentUpdated.getDateEnd() != null) {
+                appointment.setDateEnd(appointmentUpdated.getDateEnd());
+            }
+
+            if (appointmentUpdated.getPrice() != null) {
+                appointment.setPrice(appointmentUpdated.getPrice());
+            }
+            if (appointmentUpdated.getWashingOptionsIds() != null) {
+                appointment.setWashingOptionsIds(appointmentUpdated.getWashingOptionsIds());
+            }
+
+            if (appointmentUpdated.getAppointmentStatus() != null) {
+                appointment.setAppointmentStatus(appointmentUpdated.getAppointmentStatus());
+            }
+            appointmentRepository.save(appointment);
+        }
+    }
 }

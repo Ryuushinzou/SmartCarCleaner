@@ -2,6 +2,7 @@ package com.scc.app.service;
 
 import com.scc.app.model.Resource;
 import com.scc.app.model.Supply;
+import com.scc.app.model.SupplyStatus;
 import com.scc.app.mysql.repository.SupplyRepository;
 import com.scc.app.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,32 @@ public class SupplyService {
 
     public Collection<Supply> getAllSupplies() {
         return idToSupply.values();
+    }
+
+    public void update(Supply supplyUpdated) {
+
+        Supply supply = idToSupply.get(supplyUpdated.getId());
+        if (supply != null) {
+            if (supplyUpdated.getResourceIdToQuantity() != null) {
+                supply.setResourceIdToQuantity(supplyUpdated.getResourceIdToQuantity());
+            }
+
+            if (supplyUpdated.getDate() != null) {
+                supply.setDate(supplyUpdated.getDate());
+            }
+
+            if (supplyUpdated.getSupplyStatus() != null) {
+                supply.setSupplyStatus(supplyUpdated.getSupplyStatus());
+            }
+
+            if (supplyUpdated.getWashingStationId() != null) {
+                supply.setWashingStationId(supplyUpdated.getWashingStationId());
+            }
+
+            if (supplyUpdated.getPrice() != null) {
+                supply.setPrice(supplyUpdated.getPrice());
+            }
+            supplyRepository.save(supply);
+        }
     }
 }

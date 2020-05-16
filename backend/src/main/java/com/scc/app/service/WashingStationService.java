@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -52,5 +54,47 @@ public class WashingStationService {
 
     public Collection<WashingStation> getAllWashingStations() {
         return idToWashingStation.values();
+    }
+
+
+    public void updateQuantities(Long washingStationId, Map<Long, Long> resourceIdToQuantity) {
+
+        WashingStation washingStation = idToWashingStation.get(washingStationId);
+        if (washingStation != null) {
+            resourceIdToQuantity.forEach((k, v) -> {
+                Map<Long, Long> resourcesIdToQuantity = washingStation.getResourcesIdToQuantity();
+                resourcesIdToQuantity.computeIfPresent(k, (key, val) -> v + val);
+            });
+
+            update(WashingStation.builder().id(washingStationId).resourcesIdToQuantity(resourceIdToQuantity).build());
+        }
+    }
+
+    public void update(WashingStation washingStationUpdated) {
+
+        if (washingStationUpdated != null) {
+
+            WashingStation washingStation = idToWashingStation.get(washingStationUpdated.getId());
+            if (washingStation != null) {
+
+                if (washingStationUpdated.getSlots() != null) {
+                    washingStation.setSlots(washingStationUpdated.getSlots());
+                }
+
+                if (washingStationUpdated.getResourcesIdToQuantity() != null) {
+                    washingStation.setResourcesIdToQuantity(washingStationUpdated.getResourcesIdToQuantity());
+                }
+
+                if (washingStationUpdated.getLatPos() != null) {
+                    washingStation.setLatPos(washingStationUpdated.getLatPos());
+                }
+
+                if (washingStationUpdated.getLongPos() != null) {
+                    washingStation.setLongPos(washingStationUpdated.getLongPos());
+                }
+
+                washingStationRepository.save(washingStation);
+            }
+        }
     }
 }

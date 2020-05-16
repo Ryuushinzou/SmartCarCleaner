@@ -1,6 +1,7 @@
 package com.scc.app.controller;
 
 import com.scc.app.model.Appointment;
+import com.scc.app.model.AppointmentStatus;
 import com.scc.app.service.AppointmentService;
 import com.scc.app.service.AppointmentsPossibilitiesService;
 import com.scc.app.service.AuthenticationService;
@@ -47,6 +48,8 @@ public class AppointmentController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
+        appointment.setAppointmentStatus(AppointmentStatus.NOT_PAID);
+
         Appointment savedAppointment = appointmentService.saveAppointment(appointment);
         if (savedAppointment == null) {
             //TODO user already exists
@@ -74,6 +77,53 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.getAllAppointments());
     }
 
+
+    @ApiMethod(description = "Method that sets an appointment to in progress status")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/appointments/{appointmentId}/inProgress", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<String> setInProgress(
+            @RequestHeader("authorization") String authorization,
+            @ApiPathParam(name = "appointmentId") @PathVariable(value = "appointmentId") Long appointmentId
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!authenticationService.hasReadAccess(authorization)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        appointmentService.update(Appointment.builder().id(appointmentId).appointmentStatus(AppointmentStatus.IN_PROGRESS).build());
+
+        return ResponseEntity.ok(Constants.DONE);
+    }
+
+    @ApiMethod(description = "Method that sets an appointment to finished status")
+    @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
+    @RequestMapping(value = "/appointments/{appointmentId}/finished", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ApiResponseObject
+    @ResponseBody
+    ResponseEntity<String> setFinished(
+            @RequestHeader("authorization") String authorization,
+            @ApiPathParam(name = "appointmentId") @PathVariable(value = "appointmentId") Long appointmentId
+    ) {
+
+        if (!authenticationService.authenticatedUser(authorization)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (!authenticationService.hasReadAccess(authorization)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        appointmentService.update(Appointment.builder().id(appointmentId).appointmentStatus(AppointmentStatus.FINISHED).build());
+
+        return ResponseEntity.ok(Constants.DONE);
+    }
+
     @ApiMethod(description = "Method that return all appointments for a user")
     @ApiHeaders(headers = {@ApiHeader(name = "authorization", allowedvalues = "", description = "")})
     @RequestMapping(value = "/appointments/{userId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,7 +131,7 @@ public class AppointmentController {
     @ResponseBody
     ResponseEntity<Collection<Appointment>> getByName(
             @RequestHeader("authorization") String authorization,
-            @ApiPathParam(name = "userId") @PathVariable(value = "userid") Long userId
+            @ApiPathParam(name = "userId") @PathVariable(value = "userId") Long userId
     ) {
 
         if (!authenticationService.authenticatedUser(authorization)) {
@@ -119,7 +169,6 @@ public class AppointmentController {
 
             @ApiQueryParam(name = "appointmentPossibilitiesNo", description = "The number of the required possibilities", required = false)
             @RequestParam(value = "appointmentPossibilitiesNo", required = false) Integer appointmentPossibilitiesNo
-
     ) {
 
         if (!authenticationService.authenticatedUser(authorization)) {
