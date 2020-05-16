@@ -71,7 +71,7 @@ public class AppointmentService {
         return appointmentRepository.findByUserId(washingStationId);
     }
 
-    public void update(Appointment appointmentUpdated) {
+    public Appointment update(Appointment appointmentUpdated) {
 
         Appointment appointment = idToAppointment.get(appointmentUpdated.getId());
         if (appointment != null) {
@@ -99,7 +99,8 @@ public class AppointmentService {
             if (appointmentUpdated.getAppointmentStatus() != null) {
                 appointment.setAppointmentStatus(appointmentUpdated.getAppointmentStatus());
             }
-            appointmentRepository.save(appointment);
+            return appointmentRepository.save(appointment);
         }
+        return null;
     }
 }

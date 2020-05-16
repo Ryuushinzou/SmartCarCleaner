@@ -70,7 +70,7 @@ public class WashingStationService {
         }
     }
 
-    public void update(WashingStation washingStationUpdated) {
+    public WashingStation update(WashingStation washingStationUpdated) {
 
         if (washingStationUpdated != null) {
 
@@ -93,8 +93,9 @@ public class WashingStationService {
                     washingStation.setLongPos(washingStationUpdated.getLongPos());
                 }
 
-                washingStationRepository.save(washingStation);
+                return washingStationRepository.save(washingStation);
             }
         }
+        return null;
     }
 }
