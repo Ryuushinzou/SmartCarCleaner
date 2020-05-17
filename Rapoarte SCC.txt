@@ -1,9 +1,9 @@
 Rapoarte interogare DB
 
-1.	Cheltuieli / Venit / Profit – pentru o perioada de timp (ma gandesc ca e un business, pana la urma ii intereseaza daca fac bani sau nu, din punct de vedere al firmei)
-2.	Clientii care au beneficiat de bonus / ce bonus (ma gandesc un 10% reducere la fiecare a 5-a spalare sau 5% constant daca are constant 3 spalari lunare)
-3.	Numar de clienti / locatie
-4.	Tipuri de masini / locatie sau pentru toate locatiile
-5.	Ce si cat s-a consumat pt o locatie anume / toate locatiile (apa, personal, detergent, current, whatever)
-6.	Numar clienti / locatie / perioada zi ( in medie 5 clienti pentru X locatie pana in ora 12, 10 clienti dupa ora 12)
-7.	Grad de ocupare (in procente) pentru locatie pe zi (daca poti spala 100 de masini, cate au venit in ziua aia)
+1.	Income report: Cheltuieli / Venit / Profit – pentru o perioada de timp (ma gandesc ca e un business, pana la urma ii intereseaza daca fac bani sau nu, din punct de vedere al firmei)
+2.	Bonus report: Clientii care au beneficiat de bonus / ce bonus (ma gandesc un 10% reducere la fiecare a 5-a spalare sau 5% constant daca are constant 3 spalari lunare)
+3.	Popularity report: Numar de clienti / locatie
+4.	Type report: Tipuri de masini / locatie sau pentru toate locatiile
+5.	Supply report: Ce si cat s-a consumat pt o locatie anume / toate locatiile (apa, personal, detergent, current, whatever)
+6.	Popularity report: Numar clienti / locatie / perioada zi ( in medie 5 clienti pentru X locatie pana in ora 12, 10 clienti dupa ora 12)
+7.	Popularity report: Grad de ocupare (in procente) pentru locatie pe zi (daca poti spala 100 de masini, cate au venit in ziua aia)
