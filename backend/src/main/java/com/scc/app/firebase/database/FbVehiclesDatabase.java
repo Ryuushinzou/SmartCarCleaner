@@ -38,7 +38,7 @@ public class FbVehiclesDatabase extends FbDatabaseAbsImpl<Vehicle> {
 		WriteResult result = future.get();
 		Timestamp creationTimestamp = result.getUpdateTime();
 
-		//  TODO: return new entry OR update newEntry with generated id and creationTimestamp
+		//  TBA: return new entry OR update newEntry with generated id and creationTimestamp
 		return newEntry;
 	}
 
@@ -49,7 +49,7 @@ public class FbVehiclesDatabase extends FbDatabaseAbsImpl<Vehicle> {
 		WriteResult result = future.get();
 		Timestamp lastUpdateTimestamp = result.getUpdateTime();
 
-		//  TODO: return updated entry OR update entry with lastUpdateTimestamp
+		//  TBA: return updated entry OR update entry with lastUpdateTimestamp
 		return entry;
 	}
 

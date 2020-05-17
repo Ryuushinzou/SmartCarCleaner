@@ -17,8 +17,6 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class WashingStationService {
 
-    //TODO add firebase
-
     @Autowired
     private WashingStationRepository washingStationRepository;
 
@@ -29,23 +27,14 @@ public class WashingStationService {
 
         ConcurrentMap<Long, WashingStation> idToWashingStationTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            washingStationRepository.findAll().forEach(washingStation -> idToWashingStationTemporary.put(washingStation.getId(), washingStation.clone()));
-        }
+        washingStationRepository.findAll().forEach(washingStation -> idToWashingStationTemporary.put(washingStation.getId(), washingStation.clone()));
 
         idToWashingStation = idToWashingStationTemporary;
     }
 
     public WashingStation saveWashingStation(WashingStation washingStation) {
 
-        if (Utils.isFirebaseDatabase()) {
-            // TODO add to firebase db
-        } else {
-            return washingStationRepository.save(washingStation);
-        }
-        return null;
+        return washingStationRepository.save(washingStation);
     }
 
     public WashingStation getWashingStationById(Long id) {

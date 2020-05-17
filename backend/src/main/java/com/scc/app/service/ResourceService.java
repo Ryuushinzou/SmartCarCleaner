@@ -17,8 +17,6 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class ResourceService {
 
-    //TODO add firebase
-
     @Autowired
     private ResourceRepository resourceRepository;
 
@@ -29,23 +27,14 @@ public class ResourceService {
 
         ConcurrentMap<Long, Resource> idToResourceTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            resourceRepository.findAll().forEach(resource -> idToResourceTemporary.put(resource.getId(), resource.clone()));
-        }
+        resourceRepository.findAll().forEach(resource -> idToResourceTemporary.put(resource.getId(), resource.clone()));
 
         idToResource = idToResourceTemporary;
     }
 
     public Resource saveResource(Resource resource) {
 
-        if (Utils.isFirebaseDatabase()) {
-            // TODO add to firebase db
-        } else {
-            return resourceRepository.save(resource);
-        }
-        return null;
+        return resourceRepository.save(resource);
     }
 
     public Resource getResourceById(Long id) {
@@ -54,5 +43,24 @@ public class ResourceService {
 
     public Collection<Resource> getAllResources() {
         return idToResource.values();
+    }
+
+
+    public Resource update(Resource resourceUpdated) {
+
+        Resource resource = idToResource.get(resourceUpdated.getId());
+        if (resource != null) {
+
+            if (resourceUpdated.getName() != null) {
+                resource.setName(resourceUpdated.getName());
+            }
+            if (resourceUpdated.getDescription() != null) {
+                resource.setDescription(resourceUpdated.getDescription());
+            }
+            if (resourceUpdated.getPricePerUnit() != null) {
+                resource.setPricePerUnit(resourceUpdated.getPricePerUnit());
+            }
+        }
+        return null;
     }
 }

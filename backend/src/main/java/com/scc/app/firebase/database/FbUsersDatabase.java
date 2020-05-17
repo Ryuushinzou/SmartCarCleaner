@@ -43,7 +43,7 @@ public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
 
 		System.out.println(TAG + " - Created user with creationTimestamp: " + creationTimestamp.toString());
 
-		//  TODO: return new entry OR update newEntry with generated id and creationTimestamp
+		//  TBA: return new entry OR update newEntry with generated id and creationTimestamp
 		return newEntry;
 	}
 
@@ -56,7 +56,7 @@ public class FbUsersDatabase extends FbDatabaseAbsImpl<User> {
 
 		System.out.println(TAG + " - Updated user with lastUpdateTimestamp: " + lastUpdateTimestamp.toString());
 
-		//  TODO: return updated entry OR update entry with lastUpdateTimestamp
+		//  TBA: return updated entry OR update entry with lastUpdateTimestamp
 		return entry;
 	}
 

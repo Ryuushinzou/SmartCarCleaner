@@ -24,9 +24,6 @@ import java.util.concurrent.ExecutionException;
 public class VehicleService {
 
     @Autowired
-    private FbVehiclesDatabase fbVehiclesDatabase;
-
-    @Autowired
     private VehicleRepository vehicleRepository;
 
     private ConcurrentMap<Long, Vehicle> idToVehicle = new ConcurrentHashMap<>();
@@ -36,27 +33,14 @@ public class VehicleService {
 
         ConcurrentMap<Long, Vehicle> idToAppointmentTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            vehicleRepository.findAll().forEach(vehicle -> idToAppointmentTemporary.put(vehicle.getId(), vehicle.clone()));
-        }
+        vehicleRepository.findAll().forEach(vehicle -> idToAppointmentTemporary.put(vehicle.getId(), vehicle.clone()));
 
         idToVehicle = idToAppointmentTemporary;
     }
 
     public Vehicle saveVehicle(Vehicle vehicle) {
 
-        if (Utils.isFirebaseDatabase()) {
-            try {
-                return fbVehiclesDatabase.create(vehicle);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            return vehicleRepository.save(vehicle);
-        }
-        return null;
+        return vehicleRepository.save(vehicle);
     }
 
     public Vehicle deleteById(Long vehicleId) {
@@ -72,5 +56,27 @@ public class VehicleService {
 
     public Collection<Vehicle> getAllVehicles() {
         return idToVehicle.values();
+    }
+
+    public Vehicle update(Vehicle vehicleUpdated) {
+
+        Vehicle vehicle = idToVehicle.get(vehicleUpdated.getId());
+        if (vehicle != null) {
+
+            if (vehicleUpdated.getMake() != null) {
+                vehicle.setMake(vehicleUpdated.getMake());
+            }
+            if (vehicleUpdated.getModel() != null) {
+                vehicle.setModel(vehicleUpdated.getModel());
+            }
+            if (vehicleUpdated.getType() != null) {
+                vehicle.setType(vehicleUpdated.getType());
+            }
+
+            if (vehicleUpdated.getYear() != null) {
+                vehicle.setYear(vehicleUpdated.getYear());
+            }
+        }
+        return null;
     }
 }

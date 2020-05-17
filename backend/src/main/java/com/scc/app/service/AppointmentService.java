@@ -17,9 +17,6 @@ import java.util.concurrent.ExecutionException;
 public class AppointmentService {
 
     @Autowired
-    private FbAppointmentsDatabase fbAppointmentsDatabase;
-
-    @Autowired
     private AppointmentRepository appointmentRepository;
 
     private ConcurrentMap<Long, Appointment> idToAppointment = new ConcurrentHashMap<>();
@@ -29,28 +26,15 @@ public class AppointmentService {
 
         ConcurrentMap<Long, Appointment> idToAppointmentTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            appointmentRepository.findAll().forEach(appointment -> idToAppointmentTemporary.put(appointment.getId(), appointment.clone()));
-        }
+        appointmentRepository.findAll().forEach(appointment -> idToAppointmentTemporary.put(appointment.getId(), appointment.clone()));
 
         idToAppointment = idToAppointmentTemporary;
     }
 
     public Appointment saveAppointment(Appointment appointment) {
 
-        if (Utils.isFirebaseDatabase()) {
-            try {
-                return fbAppointmentsDatabase.create(appointment);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            //TODO remove resources from washing station
-            return appointmentRepository.save(appointment);
-        }
-        return null;
+        //TODO remove resources from washing station
+        return appointmentRepository.save(appointment);
     }
 
     public Appointment getAppointmentById(Long id) {
