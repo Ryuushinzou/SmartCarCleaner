@@ -3,6 +3,8 @@ package com.scc.auth_mvp
 import androidx.annotation.VisibleForTesting
 import com.scc.auth_api.AuthApi
 import com.scc.auth_api.Factory
+import com.scc.auth_api.providers.LoginBodyProvider
+import com.scc.auth_api.providers.LoginBodyProviderImpl
 import com.scc.auth_api.requests.LoginBody
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Scheduler
@@ -22,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 class LoginPresenter @VisibleForTesting constructor(
     private val subscriptions: CompositeDisposable,
     private val api: AuthApi = Factory.createAuthApi(),
+    private val bodyProvider: LoginBodyProvider = LoginBodyProviderImpl(),
     private val authorizationManager: AuthorizationProvider,
     private val subscribeOn: Scheduler,
     private val observeOn: Scheduler
@@ -52,8 +55,11 @@ class LoginPresenter @VisibleForTesting constructor(
     constructor() : this(null, null)
 
     override fun executeLogin(username: String, password: String) {
+        val loginBody = bodyProvider.withCredentials(username, password)
+            .createBody()
+
         subscriptions.add(
-            api.login(LoginBody(username, password))
+            api.login(loginBody)
                 .subscribeOn(subscribeOn)
                 .observeOn(observeOn)
                 .subscribe(
