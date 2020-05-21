@@ -5,7 +5,6 @@ import com.scc.auth_api.AuthApi
 import com.scc.auth_api.Factory
 import com.scc.auth_api.providers.LoginBodyProvider
 import com.scc.auth_api.providers.LoginBodyProviderImpl
-import com.scc.auth_api.requests.LoginBody
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers

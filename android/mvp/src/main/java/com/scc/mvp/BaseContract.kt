@@ -8,7 +8,7 @@ abstract class BaseContract {
      * Basic structure of the [Presenter] instances.
      */
     abstract class Presenter<T : View> {
-        protected var shouldNotify: Boolean = false
+        private var shouldNotify: Boolean = false
         protected var view: T? = null
             get() = if (shouldNotify) field else null
 

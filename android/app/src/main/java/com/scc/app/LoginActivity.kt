@@ -9,9 +9,9 @@ import com.scc.auth_mvp.LoginContract
 import com.scc.auth_mvp.LoginPresenter
 
 class LoginActivity : AppCompatActivity(), LoginContract.View {
-    lateinit var username: EditText
-    lateinit var password: EditText
-    lateinit var loginBtn: Button
+    private lateinit var username: EditText
+    private lateinit var password: EditText
+    private lateinit var loginBtn: Button
 
     private val presenter: LoginContract.Presenter = LoginPresenter()
 
