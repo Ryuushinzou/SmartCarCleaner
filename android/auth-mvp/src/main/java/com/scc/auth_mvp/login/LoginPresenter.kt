@@ -1,22 +1,18 @@
-package com.scc.auth_mvp
+package com.scc.auth_mvp.login
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.scc.auth_api.AuthApi
 import com.scc.auth_api.Factory
 import com.scc.auth_api.providers.LoginBodyProvider
 import com.scc.auth_api.providers.LoginBodyProviderImpl
-import com.scc.auth_mvp.exceptions.HttpCallFailureApiException
-import com.scc.auth_mvp.exceptions.NoNetworkApiException
-import com.scc.auth_mvp.exceptions.ServerUnreachableApiException
-import com.scc.networking.exceptions.HttpCallFailureException
-import com.scc.networking.exceptions.NoNetworkException
-import com.scc.networking.exceptions.ServerUnreachableException
 import com.scc.networking.subscribeWithNetworkErrors
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.lang.RuntimeException
 
 /**
  * Implementation of the [LoginContract.Presenter].
@@ -77,7 +73,14 @@ class LoginPresenter @VisibleForTesting constructor(
                 .observeOn(observeOn)
                 .subscribeWithNetworkErrors(
                     { authorization -> onLoginSuccessful(authorization) },
-                    { exception -> handleHttpException(exception) }
+                    { exception ->
+                        val isHandled = handleHttpException(exception)
+                        if (!isHandled) {
+                            exception.printStackTrace()
+
+                            view?.showError(RuntimeException("Unknown problem encountered"))
+                        }
+                    }
                 )
         )
     }
@@ -85,16 +88,5 @@ class LoginPresenter @VisibleForTesting constructor(
     private fun onLoginSuccessful(authorization: String) {
         authorizationManager.setAuthorization(authorization)
         view?.onLoginSuccessful()
-    }
-
-    private fun handleHttpException(exception: Throwable) {
-        val exc = when(exception) {
-            is NoNetworkException -> NoNetworkApiException(exception)
-            is ServerUnreachableException -> ServerUnreachableApiException(exception)
-            is HttpCallFailureException -> HttpCallFailureApiException(exception)
-            else -> exception
-        }
-
-        view?.showError(exc)
     }
 }

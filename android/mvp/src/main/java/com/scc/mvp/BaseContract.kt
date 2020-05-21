@@ -1,5 +1,9 @@
 package com.scc.mvp
 
+import com.scc.common_exceptions.HttpCallFailureException
+import com.scc.common_exceptions.NoNetworkException
+import com.scc.common_exceptions.ServerUnreachableException
+
 /**
  * The base contract between a presenter and its related view.
  */
@@ -42,10 +46,28 @@ abstract class BaseContract {
         fun attach(view: T) {
             this.view = view
         }
+
+        /**
+         * @return true if exception has been handled; false otherwise.
+         */
+        protected fun handleHttpException(exception: Throwable): Boolean = when (exception) {
+            is NoNetworkException, is ServerUnreachableException, is HttpCallFailureException -> {
+                view?.showError(exception)
+                true
+            }
+            else -> false
+        }
     }
 
     /**
      * Basic structure of the [View] instances.
      */
-    interface View
+    interface View {
+        /**
+         * Display error in UI.
+         *
+         * @param error to be displayed
+         */
+        fun showError(error: Throwable)
+    }
 }

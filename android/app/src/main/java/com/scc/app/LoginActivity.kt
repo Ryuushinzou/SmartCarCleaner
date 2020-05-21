@@ -11,8 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
-import com.scc.auth_mvp.LoginContract
-import com.scc.auth_mvp.LoginPresenter
+import com.scc.auth_mvp.login.LoginContract
+import com.scc.auth_mvp.login.LoginPresenter
 import com.scc.auth_mvp.exceptions.HttpCallFailureApiException
 import com.scc.auth_mvp.exceptions.NoNetworkApiException
 import com.scc.auth_mvp.exceptions.ServerUnreachableApiException
@@ -24,7 +24,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
     private lateinit var loginBtn: Button
     private lateinit var loading: ViewGroup
 
-    private val presenter: LoginContract.Presenter = LoginPresenter()
+    private val presenter: LoginContract.Presenter =
+        LoginPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

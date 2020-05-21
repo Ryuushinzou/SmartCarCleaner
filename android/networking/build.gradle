@@ -36,6 +36,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
 
     implementation project(":security")
+    implementation project(":common-exceptions")
 
 //    Retrofit
     implementation "com.squareup.retrofit2:retrofit:" + rootProject.retrofitVersion

@@ -4,8 +4,11 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.scc.auth_api.AuthApi
 import com.scc.auth_api.providers.LoginBodyProvider
-import com.scc.auth_api.requests.LoginBody
-import com.scc.networking.exceptions.UnauthorizedHttpException
+import com.scc.auth_mvp.Login.TEST_INVALID_PASSWORD_BODY
+import com.scc.auth_mvp.Login.TEST_INVALID_USERNAME_BODY
+import com.scc.auth_mvp.Login.TEST_VALID_LOGIN_BODY
+import com.scc.auth_mvp.login.LoginContract
+import com.scc.auth_mvp.login.LoginPresenter
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -13,23 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.*
-
-private const val TEST_VALID_USERNAME = "validUsername"
-private const val TEST_INVALID_USERNAME = "invalid-username"
-private const val TEST_VALID_PASSWORD = "validPassword"
-private const val TEST_INVALID_PASSWORD = "invalid-password"
-
-private val TEST_VALID_LOGIN_BODY = LoginBody(TEST_VALID_USERNAME, TEST_VALID_PASSWORD)
-private val TEST_INVALID_USERNAME_BODY = LoginBody(TEST_INVALID_USERNAME, TEST_INVALID_PASSWORD)
-private val TEST_INVALID_PASSWORD_BODY = LoginBody(TEST_VALID_USERNAME, TEST_INVALID_PASSWORD)
-
-private const val TEST_AUTHORIZATION_STRING = "test-authorization-string"
-private val TEST_INVALID_PASSWORD_EXCEPTION = UnauthorizedHttpException("Invalid password")
-private val TEST_INVALID_CREDENTIALS_EXCEPTION = UnauthorizedHttpException("Invalid credentials")
-
-private fun <T : Any> eq(value: T): T = Mockito.eq(value) ?: value
 
 class LoginPresenterTest {
 
@@ -86,7 +73,10 @@ class LoginPresenterTest {
         //  Loading state should be requested
         verify(mockView).showLoading()
 
-        verify(mockLoginBodyProvider, times(1)).withCredentials(TEST_VALID_USERNAME, TEST_VALID_PASSWORD)
+        verify(mockLoginBodyProvider, times(1)).withCredentials(
+            TEST_VALID_USERNAME,
+            TEST_VALID_PASSWORD
+        )
         verify(mockLoginBodyProvider, times(1)).createBody()
         verify(mockApi, times(1)).login(TEST_VALID_LOGIN_BODY)
         verify(mockAuthorizationManager, times(1)).setAuthorization(TEST_AUTHORIZATION_STRING)
@@ -135,7 +125,10 @@ class LoginPresenterTest {
         //  Loading state should be requested
         verify(mockView).showLoading()
 
-        verify(mockLoginBodyProvider, times(1)).withCredentials(TEST_INVALID_USERNAME, TEST_INVALID_PASSWORD)
+        verify(mockLoginBodyProvider, times(1)).withCredentials(
+            TEST_INVALID_USERNAME,
+            TEST_INVALID_PASSWORD
+        )
         verify(mockLoginBodyProvider, times(1)).createBody()
         verify(mockApi, times(1)).login(TEST_INVALID_USERNAME_BODY)
         verify(mockAuthorizationManager, never()).setAuthorization(TEST_AUTHORIZATION_STRING)
