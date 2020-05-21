@@ -51,6 +51,8 @@ class LoginPresenterTest {
     private val mockAuthorizationManager: AuthorizationProvider = mock { }
     private val testScheduler: Scheduler = Schedulers.trampoline()
 
+    private val mockView: LoginContract.View = mock { }
+
     private val sut = LoginPresenter(
         testSubscriptions,
         mockApi,
@@ -75,13 +77,22 @@ class LoginPresenterTest {
         //  Generate valid request body
         `when`(mockLoginBodyProvider.createBody()).thenReturn(TEST_VALID_LOGIN_BODY)
 
+        sut.subscribe()
+        sut.attach(mockView)
+
         //  Execute call to sut
         sut.executeLogin(TEST_VALID_USERNAME, TEST_VALID_PASSWORD)
+
+        //  Loading state should be requested
+        verify(mockView).showLoading()
 
         verify(mockLoginBodyProvider, times(1)).withCredentials(TEST_VALID_USERNAME, TEST_VALID_PASSWORD)
         verify(mockLoginBodyProvider, times(1)).createBody()
         verify(mockApi, times(1)).login(TEST_VALID_LOGIN_BODY)
         verify(mockAuthorizationManager, times(1)).setAuthorization(TEST_AUTHORIZATION_STRING)
+
+        //  Successful state should be requested
+        verify(mockView).onLoginSuccessful()
     }
 
     @Test
@@ -89,8 +100,14 @@ class LoginPresenterTest {
         //  Generate invalid request body
         `when`(mockLoginBodyProvider.createBody()).thenReturn(TEST_INVALID_PASSWORD_BODY)
 
+        sut.subscribe()
+        sut.attach(mockView)
+
         //  Execute call to sut
         sut.executeLogin(TEST_VALID_USERNAME, TEST_INVALID_PASSWORD)
+
+        //  Loading state should be requested
+        verify(mockView).showLoading()
 
         verify(mockLoginBodyProvider, times(1)).withCredentials(
             TEST_VALID_USERNAME,
@@ -99,6 +116,9 @@ class LoginPresenterTest {
         verify(mockLoginBodyProvider, times(1)).createBody()
         verify(mockApi, times(1)).login(TEST_INVALID_PASSWORD_BODY)
         verify(mockAuthorizationManager, never()).setAuthorization(TEST_AUTHORIZATION_STRING)
+
+        //  Error state should be requested
+        verify(mockView).showError(eq(TEST_INVALID_PASSWORD_EXCEPTION))
     }
 
     @Test
@@ -106,12 +126,21 @@ class LoginPresenterTest {
         //  Generate invalid request body
         `when`(mockLoginBodyProvider.createBody()).thenReturn(TEST_INVALID_USERNAME_BODY)
 
+        sut.subscribe()
+        sut.attach(mockView)
+
         //  Execute call to sut
         sut.executeLogin(TEST_INVALID_USERNAME, TEST_INVALID_PASSWORD)
+
+        //  Loading state should be requested
+        verify(mockView).showLoading()
 
         verify(mockLoginBodyProvider, times(1)).withCredentials(TEST_INVALID_USERNAME, TEST_INVALID_PASSWORD)
         verify(mockLoginBodyProvider, times(1)).createBody()
         verify(mockApi, times(1)).login(TEST_INVALID_USERNAME_BODY)
         verify(mockAuthorizationManager, never()).setAuthorization(TEST_AUTHORIZATION_STRING)
+
+        //  Error state should be requested
+        verify(mockView).showError(eq(TEST_INVALID_CREDENTIALS_EXCEPTION))
     }
 }

@@ -102,7 +102,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
     private fun getUserError(throwable: Throwable): String = when (throwable) {
         is NoNetworkApiException -> "No internet connection"
         is ServerUnreachableApiException -> "Could not connect to server"
-        is HttpCallFailureApiException -> "Invalid username and password"
+        is HttpCallFailureApiException -> "Invalid username or password"
         else -> throwable.message ?: "Unknown error. Please try again later"
     }
 
