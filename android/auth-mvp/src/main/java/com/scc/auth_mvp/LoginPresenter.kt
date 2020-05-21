@@ -5,6 +5,13 @@ import com.scc.auth_api.AuthApi
 import com.scc.auth_api.Factory
 import com.scc.auth_api.providers.LoginBodyProvider
 import com.scc.auth_api.providers.LoginBodyProviderImpl
+import com.scc.auth_mvp.exceptions.HttpCallFailureApiException
+import com.scc.auth_mvp.exceptions.NoNetworkApiException
+import com.scc.auth_mvp.exceptions.ServerUnreachableApiException
+import com.scc.networking.exceptions.HttpCallFailureException
+import com.scc.networking.exceptions.NoNetworkException
+import com.scc.networking.exceptions.ServerUnreachableException
+import com.scc.networking.subscribeWithNetworkErrors
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -54,21 +61,40 @@ class LoginPresenter @VisibleForTesting constructor(
     constructor() : this(null, null)
 
     override fun executeLogin(username: String, password: String) {
-        val loginBody = bodyProvider.withCredentials(username, password)
-            .createBody()
+        view?.showLoading()
+
+        val loginBody = try {
+            bodyProvider.withCredentials(username, password)
+                .createBody()
+        } catch (e: IllegalArgumentException) {
+            view?.showError(e)
+            return
+        }
 
         subscriptions.add(
             api.login(loginBody)
                 .subscribeOn(subscribeOn)
                 .observeOn(observeOn)
-                .subscribe(
+                .subscribeWithNetworkErrors(
                     { authorization -> onLoginSuccessful(authorization) },
-                    { exception -> view?.showError(exception) })
+                    { exception -> handleHttpException(exception) }
+                )
         )
     }
 
     private fun onLoginSuccessful(authorization: String) {
         authorizationManager.setAuthorization(authorization)
         view?.onLoginSuccessful()
+    }
+
+    private fun handleHttpException(exception: Throwable) {
+        val exc = when(exception) {
+            is NoNetworkException -> NoNetworkApiException(exception)
+            is ServerUnreachableException -> ServerUnreachableApiException(exception)
+            is HttpCallFailureException -> HttpCallFailureApiException(exception)
+            else -> exception
+        }
+
+        view?.showError(exc)
     }
 }

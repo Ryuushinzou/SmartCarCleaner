@@ -9,13 +9,6 @@ class LoginContract {
      */
     interface View: com.scc.mvp.BaseContract.View {
         /**
-         * Update UI to show/hide password string.
-         *
-         * @param isVisible - the visibility of the password string
-         */
-        fun togglePasswordVisibility(isVisible: Boolean)
-
-        /**
          * Update UI to disable interaction and display a loading view.
          */
         fun showLoading()
