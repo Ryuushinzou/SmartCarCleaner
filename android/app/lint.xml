@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <issue id="UnusedResources" severity="ignore">
+        <ignore path="**/AndroidManifest.xml"/>
+        <ignore path="**/main/src/res/drawable/**"/>
+        <ignore path="**/main/src/res/mipmap/**"/>
+        <ignore path="**/styles.xml"/>
+        <ignore path="**/colors.xml"/>
+    </issue>
+</lint>
