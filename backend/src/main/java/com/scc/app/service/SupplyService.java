@@ -16,8 +16,6 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class SupplyService {
 
-    //TODO add firebase
-
     @Autowired
     private SupplyRepository supplyRepository;
 
@@ -28,23 +26,14 @@ public class SupplyService {
 
         ConcurrentMap<Long, Supply> idToSupplyTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            supplyRepository.findAll().forEach(supply -> idToSupplyTemporary.put(supply.getId(), supply.clone()));
-        }
+        supplyRepository.findAll().forEach(supply -> idToSupplyTemporary.put(supply.getId(), supply.clone()));
 
         idToSupply = idToSupplyTemporary;
     }
 
     public Supply saveSupply(Supply supply) {
 
-        if (Utils.isFirebaseDatabase()) {
-            // TODO add to firebase db
-        } else {
-            return supplyRepository.save(supply);
-        }
-        return null;
+        return supplyRepository.save(supply);
     }
 
     public Supply getResourceById(Long id) {

@@ -2,6 +2,7 @@ package com.scc.app.service;
 
 import com.scc.app.encryption.PasswordEncrypt;
 import com.scc.app.firebase.database.FbUsersDatabase;
+import com.scc.app.model.Resource;
 import com.scc.app.model.User;
 import com.scc.app.mysql.repository.UserRepository;
 import com.scc.app.utils.Utils;
@@ -22,9 +23,6 @@ import java.util.concurrent.ExecutionException;
 public class UserService {
 
     @Autowired
-    private FbUsersDatabase fbUsersDatabase;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -37,11 +35,7 @@ public class UserService {
 
         ConcurrentMap<Long, User> idToUserTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            userRepository.findAll().forEach(user -> idToUserTemporary.put(user.getId(), user.clone()));
-        }
+        userRepository.findAll().forEach(user -> idToUserTemporary.put(user.getId(), user.clone()));
 
         idToUser = idToUserTemporary;
     }
@@ -49,16 +43,8 @@ public class UserService {
     public User saveUser(User user) throws NoSuchAlgorithmException {
 
         user.setPassword(passwordEncrypt.encryptPassword(user.getPassword()));
-        if (Utils.isFirebaseDatabase()) {
-            try {
-                return fbUsersDatabase.create(user);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            return userRepository.save(user);
-        }
-        return null;
+
+        return userRepository.save(user);
     }
 
     public User getUserById(Long id) {
@@ -75,4 +61,31 @@ public class UserService {
     public Collection<User> getAllUsers() {
         return idToUser.values();
     }
+
+    public User update(User userUpdated) {
+
+        User user = idToUser.get(userUpdated.getId());
+        if (user != null) {
+
+            if (userUpdated.getUserName() != null) {
+                user.setUserName(userUpdated.getUserName());
+            }
+            if (userUpdated.getEmail() != null) {
+                user.setEmail(userUpdated.getEmail());
+            }
+            if (userUpdated.getPhoneNumber() != null) {
+                user.setPhoneNumber(userUpdated.getPhoneNumber());
+            }
+
+            if (userUpdated.getCarIds() != null) {
+                user.setCarIds(userUpdated.getCarIds());
+            }
+
+            if (userUpdated.getUserType() != null) {
+                user.setUserType(userUpdated.getUserType());
+            }
+        }
+        return null;
+    }
+
 }

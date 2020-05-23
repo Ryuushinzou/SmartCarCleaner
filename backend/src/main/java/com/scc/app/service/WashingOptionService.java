@@ -1,5 +1,6 @@
 package com.scc.app.service;
 
+import com.scc.app.model.Vehicle;
 import com.scc.app.model.WashingOption;
 import com.scc.app.mysql.repository.WashingOptionRepository;
 import com.scc.app.utils.Utils;
@@ -14,8 +15,6 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class WashingOptionService {
 
-    //TODO add firebase
-
     @Autowired
     private WashingOptionRepository washingOptionRepository;
 
@@ -26,23 +25,14 @@ public class WashingOptionService {
 
         ConcurrentMap<Long, WashingOption> idToWashingOptionTemporary = new ConcurrentHashMap<>();
 
-        if (Utils.isFirebaseDatabase()) {
-            //TODO get all firebase
-        } else {
-            washingOptionRepository.findAll().forEach(washingOption -> idToWashingOptionTemporary.put(washingOption.getId(), washingOption.clone()));
-        }
+        washingOptionRepository.findAll().forEach(washingOption -> idToWashingOptionTemporary.put(washingOption.getId(), washingOption.clone()));
 
         idToWashingOption = idToWashingOptionTemporary;
     }
 
     public WashingOption saveWashingOption(WashingOption washingOption) {
 
-        if (Utils.isFirebaseDatabase()) {
-            // TODO add to firebase db
-        } else {
-            return washingOptionRepository.save(washingOption);
-        }
-        return null;
+        return washingOptionRepository.save(washingOption);
     }
 
     public WashingOption getWashindOptionById(Long id) {
@@ -51,5 +41,31 @@ public class WashingOptionService {
 
     public Collection<WashingOption> getAllWashingOptions() {
         return idToWashingOption.values();
+    }
+
+    public WashingOption update(WashingOption washingOptionUpdated) {
+
+        WashingOption washingOption = idToWashingOption.get(washingOptionUpdated.getId());
+        if (washingOption != null) {
+
+            if (washingOptionUpdated.getName() != null) {
+                washingOption.setName(washingOptionUpdated.getName());
+            }
+            if (washingOptionUpdated.getDescription() != null) {
+                washingOption.setDescription(washingOptionUpdated.getDescription());
+            }
+            if (washingOptionUpdated.getRequiredResourcesIdToQuantity() != null) {
+                washingOption.setRequiredResourcesIdToQuantity(washingOptionUpdated.getRequiredResourcesIdToQuantity());
+            }
+
+            if (washingOptionUpdated.getPrice() != null) {
+                washingOption.setPrice(washingOptionUpdated.getPrice());
+            }
+
+            if (washingOptionUpdated.getDuration() != null) {
+                washingOption.setDuration(washingOptionUpdated.getDuration());
+            }
+        }
+        return null;
     }
 }
