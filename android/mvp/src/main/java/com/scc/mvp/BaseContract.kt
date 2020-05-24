@@ -1,5 +1,6 @@
 package com.scc.mvp
 
+import androidx.annotation.MainThread
 import com.scc.common_exceptions.HttpCallFailureException
 import com.scc.common_exceptions.NoNetworkException
 import com.scc.common_exceptions.ServerUnreachableException
@@ -68,6 +69,7 @@ abstract class BaseContract {
          *
          * @param error to be displayed
          */
+        @MainThread
         fun showError(error: Throwable)
     }
 }

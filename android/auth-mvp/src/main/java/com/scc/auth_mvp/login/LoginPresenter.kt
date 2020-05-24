@@ -1,18 +1,17 @@
 package com.scc.auth_mvp.login
 
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import com.scc.auth_api.AuthApi
 import com.scc.auth_api.Factory
 import com.scc.auth_api.providers.LoginBodyProvider
 import com.scc.auth_api.providers.LoginBodyProviderImpl
+import com.scc.networking.RetrofitInstance
 import com.scc.networking.subscribeWithNetworkErrors
 import com.scc.security.AuthorizationProvider
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.RuntimeException
 
 /**
  * Implementation of the [LoginContract.Presenter].
@@ -87,6 +86,7 @@ class LoginPresenter @VisibleForTesting constructor(
 
     private fun onLoginSuccessful(authorization: String) {
         authorizationManager.setAuthorization(authorization)
+        RetrofitInstance.setAuthorizationProvider(authorizationManager)
         view?.onLoginSuccessful()
     }
 }

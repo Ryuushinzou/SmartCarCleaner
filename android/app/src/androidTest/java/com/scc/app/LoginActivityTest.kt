@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
+import com.scc.app.utils.hasTextInputLayoutErrorText
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -75,6 +76,10 @@ class LoginActivityTest {
             .perform(click())
 
         onView(withId(R.id.login_username_container))
-            .check(matches(hasTextInputLayoutErrorText(INVALID_CREDENTIALS_MESSAGE)))
+            .check(matches(
+                hasTextInputLayoutErrorText(
+                    INVALID_CREDENTIALS_MESSAGE
+                )
+            ))
     }
 }

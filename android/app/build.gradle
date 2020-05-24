@@ -63,6 +63,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0'
 
 //    Project modules
+    implementation project(':common-exceptions')
     implementation project(':mvp')
     implementation project(':auth-mvp')
 

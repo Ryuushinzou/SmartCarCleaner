@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.scc.auth_mvp.login.LoginContract
@@ -16,12 +17,17 @@ import com.scc.auth_mvp.login.LoginPresenter
 import com.scc.auth_mvp.exceptions.HttpCallFailureApiException
 import com.scc.auth_mvp.exceptions.NoNetworkApiException
 import com.scc.auth_mvp.exceptions.ServerUnreachableApiException
+import com.scc.common_exceptions.HttpCallFailureException
+import com.scc.common_exceptions.NoNetworkException
+import com.scc.common_exceptions.ServerUnreachableException
 
 class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
     private lateinit var usernameContainer: TextInputLayout
     private lateinit var username: EditText
     private lateinit var password: EditText
     private lateinit var loginBtn: Button
+    private lateinit var registerLink: TextView
+    private lateinit var resetPasswordLink: TextView
     private lateinit var loading: ViewGroup
 
     private val presenter: LoginContract.Presenter =
@@ -35,6 +41,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
         username = findViewById(R.id.login_username_input)
         password = findViewById(R.id.login_password_input)
         loginBtn = findViewById(R.id.login_submit_button)
+        registerLink = findViewById(R.id.login_register)
+        resetPasswordLink = findViewById(R.id.login_forgot_password)
         loading = findViewById(R.id.login_loading_container)
 
         username.addTextChangedListener(this@LoginActivity)
@@ -49,6 +57,15 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
             }
 
             presenter.executeLogin(username, password)
+        }
+
+        registerLink.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        resetPasswordLink.setOnClickListener {
+            //  TODO: implement
+            println("Not implemented")
         }
 
         presenter.attach(this)
@@ -100,10 +117,11 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
             MainActivity::class.java
         ).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) })
 
+//    TODO: Rethink this so that we do not use common-exceptions module in the main app
     private fun getUserError(throwable: Throwable): String = when (throwable) {
-        is NoNetworkApiException -> "No internet connection"
-        is ServerUnreachableApiException -> "Could not connect to server"
-        is HttpCallFailureApiException -> "Invalid username or password"
+        is NoNetworkException -> "No internet connection"
+        is ServerUnreachableException -> "Could not connect to server"
+        is HttpCallFailureException -> "Invalid username or password"
         else -> throwable.message ?: "Unknown error. Please try again later"
     }
 
