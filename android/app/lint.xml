@@ -7,4 +7,8 @@
         <ignore path="**/styles.xml"/>
         <ignore path="**/colors.xml"/>
     </issue>
+
+    <issue id="RtlEnabled">
+        <ignore path="**/AndroidManifest.xml" />
+    </issue>
 </lint>

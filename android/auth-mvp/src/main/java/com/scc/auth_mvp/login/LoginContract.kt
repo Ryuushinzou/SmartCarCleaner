@@ -1,4 +1,4 @@
-package com.scc.auth_mvp
+package com.scc.auth_mvp.login
 
 /**
  * Contract definition for the Login component.
@@ -12,13 +12,6 @@ class LoginContract {
          * Update UI to disable interaction and display a loading view.
          */
         fun showLoading()
-
-        /**
-         * Update UI to display error message inside the view view.
-         *
-         * @param error to be displayed inside the view
-         */
-        fun showError(error: Throwable)
 
         /**
          * Update UI's state after successfully authenticating the user.

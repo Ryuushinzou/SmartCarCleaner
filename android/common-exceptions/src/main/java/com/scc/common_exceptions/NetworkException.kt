@@ -1,4 +1,4 @@
-package com.scc.networking.exceptions
+package com.scc.common_exceptions
 
 open class NetworkException(error: Throwable): RuntimeException(error)
 

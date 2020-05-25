@@ -1,6 +1,8 @@
 package com.scc.auth_api
 
 import com.scc.auth_api.requests.LoginBody
+import com.scc.auth_api.requests.RegisterBody
+import com.scc.auth_api.responses.RegisterResponse
 import io.reactivex.Observable
 
 /**
@@ -13,4 +15,9 @@ interface AuthApi {
      * @param body to be used for authentication
      */
     fun login(body: LoginBody): Observable<String>
+
+    /**
+     * TODO
+     */
+    fun register(body: RegisterBody): Observable<RegisterResponse>
 }

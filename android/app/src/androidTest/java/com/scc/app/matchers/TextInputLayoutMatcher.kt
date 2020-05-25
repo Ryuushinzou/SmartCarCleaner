@@ -1,4 +1,4 @@
-package com.scc.app
+package com.scc.app.matchers
 
 import android.view.View
 import com.google.android.material.textfield.TextInputLayout

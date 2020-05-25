@@ -43,7 +43,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:" + rootProject.retrofitVersion
 
 //    Gson
-//    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
 
 //    Project modules
     implementation project(':networking')
