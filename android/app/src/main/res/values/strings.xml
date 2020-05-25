@@ -5,14 +5,14 @@
     <string name="app_build_type_placeholder">%s</string>
     <string name="app_error_placeholder">Error: 000 - Placeholder error message</string>
 
-<!--    Login       -->
+    <!--    Login       -->
     <string name="login_username_input_hint">Username</string>
     <string name="login_password_input_hint">Password</string>
     <string name="login_submit_button_text">Login</string>
     <string name="login_register_link">Sign up now!</string>
     <string name="login_forgot_password_link">Reset password</string>
 
-<!--    Register    -->
+    <!--    Register    -->
     <string name="register_username_input_hint">Username</string>
     <string name="register_email_input_hint">Email</string>
     <string name="register_phone_input_hint">Phone no.</string>
