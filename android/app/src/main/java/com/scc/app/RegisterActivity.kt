@@ -11,7 +11,6 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.scc.auth_mvp.login.LoginContract
-import com.scc.auth_mvp.login.LoginPresenter
 import com.scc.auth_mvp.register.RegisterContract
 import com.scc.auth_mvp.register.RegisterPresenter
 
@@ -31,7 +30,6 @@ class RegisterActivity : AppCompatActivity(), RegisterContract.View, LoginContra
     private lateinit var loading: ViewGroup
 
     private val registerPresenter: RegisterContract.Presenter = RegisterPresenter()
-    private val loginPresenter: LoginContract.Presenter = LoginPresenter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +82,6 @@ class RegisterActivity : AppCompatActivity(), RegisterContract.View, LoginContra
         }
 
         registerPresenter.attach(this)
-        loginPresenter.attach(this)
     }
 
     override fun onStop() {
@@ -114,7 +111,7 @@ class RegisterActivity : AppCompatActivity(), RegisterContract.View, LoginContra
             return
         }
 
-        loginPresenter.executeLogin(username, password)
+        navigateToLogin()
     }
 
     override fun showError(error: Throwable) {
@@ -126,6 +123,17 @@ class RegisterActivity : AppCompatActivity(), RegisterContract.View, LoginContra
             this,
             MainActivity::class.java
         ).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) })
+
+    private fun navigateToLogin() = startActivity(
+        Intent(
+            this,
+            LoginActivity::class.java
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra(KEY_USERNAME_EXTRA, username.text.toString())
+            putExtra(KEY_PASSWORD_EXTRA, password.text.toString())
+        }
+    )
 
     private fun hideLoading() {
         loading.visibility = View.GONE

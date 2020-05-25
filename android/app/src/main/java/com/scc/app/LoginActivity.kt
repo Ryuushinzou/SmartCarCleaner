@@ -21,6 +21,9 @@ import com.scc.common_exceptions.HttpCallFailureException
 import com.scc.common_exceptions.NoNetworkException
 import com.scc.common_exceptions.ServerUnreachableException
 
+const val KEY_USERNAME_EXTRA = "usr_extra"
+const val KEY_PASSWORD_EXTRA = "pwd_extra"
+
 class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
     private lateinit var usernameContainer: TextInputLayout
     private lateinit var username: EditText
@@ -69,6 +72,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
         }
 
         presenter.attach(this)
+
+        setExtrasIfPresent()
     }
 
     override fun onStop() {
@@ -109,6 +114,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View, TextWatcher {
     private fun clearErrors() {
         usernameContainer.error = null
         usernameContainer.isErrorEnabled = false
+    }
+
+    private fun setExtrasIfPresent() {
+        val extras = intent.extras ?: return
+
+        val username: String? = extras.getString(KEY_USERNAME_EXTRA)
+        val password: String? = extras.getString(KEY_PASSWORD_EXTRA)
+
+        username?.let { value -> this.username.setText(value) }
+        password?.let { value -> this.password.setText(value) }
     }
 
     private fun navigateToMain() = startActivity(
